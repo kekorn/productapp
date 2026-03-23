@@ -1,4 +1,4 @@
-@page "/category/edit/{id:int}"
+@page "/category/edit/{id}"
 @inject HttpClient Http
 @inject NavigationManager Navigation
 @using Shared.Dto
@@ -29,20 +29,23 @@ else
 
 @code {
     [Parameter]
-    public int Id { get; set; }
+    public string? Id { get; set; }
 
     private CategoryDto? category;
 
     protected override async Task OnInitializedAsync()
     {
-        category = await Http.GetFromJsonAsync<CategoryDto>($"category/{Id}");
+        if (!string.IsNullOrEmpty(Id))
+        {
+            category = await Http.GetFromJsonAsync<CategoryDto>($"category/{Id}");
+        }
     }
 
     private async Task HandleValidSubmit()
     {
-        if (category != null)
+        if (category != null && !string.IsNullOrEmpty(category.Id))
         {
-            var response = await Http.PutAsJsonAsync($"category/{category.CategoryID}", category);
+            var response = await Http.PutAsJsonAsync($"category/{category.Id}", category);
             if (response.IsSuccessStatusCode)
             {
                 Navigation.NavigateTo("/category");

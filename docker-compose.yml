@@ -1,0 +1,84 @@
+services:
+  # MongoDB Database
+  mongodb:
+    image: mongo:latest
+    container_name: productapp-mongodb
+    environment:
+      MONGO_INITDB_DATABASE: ProductApp
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/ProductApp
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - productapp-network
+
+  # WebAPI Service
+  webapi:
+    build:
+      context: .
+      dockerfile: WebAPI/Dockerfile
+    container_name: productapp-webapi
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Production"
+      ConnectionStrings__MongoDB: "mongodb://mongodb:27017"
+      MongoDB__DatabaseName: "ProductApp"
+    ports:
+      - "7211:8080"
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    networks:
+      - productapp-network
+    restart: unless-stopped
+
+  # AuthAPI Service
+  authapi:
+    build:
+      context: .
+      dockerfile: AuthAPI/Dockerfile
+    container_name: productapp-authapi
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Production"
+      ConnectionStrings__MongoDB: "mongodb://mongodb:27017"
+      MongoDB__DatabaseName: "ProductApp"
+    ports:
+      - "7297:8080"
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    networks:
+      - productapp-network
+    restart: unless-stopped
+
+  # BlazorUI Service
+  blazorui:
+    build:
+      context: .
+      dockerfile: BlazorUI/Dockerfile
+    container_name: productapp-blazorui
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Production"
+      ASPNETCORE_URLS: "http://+:8080"
+      ApiBaseUrl: "http://webapi:8080/api/"
+      AuthApiUrl: "http://authapi:8080"
+    ports:
+      - "8080:8080"
+    depends_on:
+      - webapi
+      - authapi
+    networks:
+      - productapp-network
+    restart: unless-stopped
+
+volumes:
+  mongodb_data:
+    driver: local
+
+networks:
+  productapp-network:
+    driver: bridge

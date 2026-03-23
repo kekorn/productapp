@@ -1,3 +1,4 @@
+using MongoDB.Driver;
 using Shared.Models;
 using System.Linq;
 using WebAPI.Data;
@@ -5,22 +6,25 @@ namespace WebAPI.Security
 {
     public class APISecurity
     {
-        public static bool Validate(string username, string password)
+        private readonly AppDbContext _context;
+
+        public APISecurity(AppDbContext context)
         {
-            AppDbContext context = new AppDbContext();
+            _context = context;
+        }
+
+        public bool Validate(string username, string password)
+        {
             try
             {
-                MyUser user = context.MyUsers.SingleOrDefault(u => u.Username == username && u.Password == password);
-
-                if (user != null)
-                {
-                    return true;
-                }
+                MyUser user = _context.MyUsers.AsQueryable()
+                    .SingleOrDefault(u => u.Username == username && u.Password == password);
+                return user != null;
             }
-            catch (Exception ex) { 
+            catch (Exception ex)
+            {
                 return false;
             }
-            return false;
         }
     }
 }

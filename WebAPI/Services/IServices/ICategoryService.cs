@@ -7,16 +7,16 @@ namespace WebAPI.Services.IServices
         IEnumerable<CategoryDto> GetAll();
 
         // GET a product by id
-        CategoryDto GetById(int id);
+        CategoryDto GetById(string id);
 
         // Create a new product
         void Create(CategoryDto categoryDto);
 
         // Update an existing product
-        void Update(int id, CategoryDto categoryDto);
+        void Update(string id, CategoryDto categoryDto);
 
         // Delete a product by id
-        void Delete(int id);
+        void Delete(string id);
 
     }
 }

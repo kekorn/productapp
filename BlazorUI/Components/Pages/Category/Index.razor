@@ -22,8 +22,8 @@ else
             <PropertyColumn Property="@(c => c.CategoryID)" Title="ID" />
             <PropertyColumn Property="@(c => c.CName)" Title="Name" />
             <TemplateColumn Title="Actions">
-                <a href="/category/edit/@context.CategoryID" class="btn btn-sm btn-warning">Edit</a>
-                <button class="btn btn-sm btn-danger" @onclick="() => DeleteCategory(context.CategoryID)">Delete</button>
+                <a href="/category/edit/@context.Id" class="btn btn-sm btn-warning">Edit</a>
+                <button class="btn btn-sm btn-danger" @onclick="() => DeleteCategory(context.Id)">Delete</button>
             </TemplateColumn>
         </QuickGrid>
     </div>
@@ -50,7 +50,7 @@ else
         }
         catch (HttpRequestException)
         {
-            categories = new List<CategoryDto>(); // Ha 404 vagy egyéb hiba van, akkor üres listát adunk
+            categories = new List<CategoryDto>();
         }
         catch (Exception)
         {
@@ -58,12 +58,15 @@ else
         }
     }
 
-    private async Task DeleteCategory(int id)
+    private async Task DeleteCategory(string? id)
     {
-        var response = await Http.DeleteAsync($"category/{id}");
-        if (response.IsSuccessStatusCode)
+        if (!string.IsNullOrEmpty(id))
         {
-            await LoadCategories();
+            var response = await Http.DeleteAsync($"category/{id}");
+            if (response.IsSuccessStatusCode)
+            {
+                await LoadCategories();
+            }
         }
     }
 }

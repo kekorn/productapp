@@ -3,6 +3,7 @@ namespace Shared.Dto
 {
     public class ProductDto
     {
+        public string? Id { get; set; }
         public int ProductID { get; set; }
         [Display(Name = "Name")]
         public string ProductName { get; set; }
@@ -12,5 +13,6 @@ namespace Shared.Dto
         public int CategoryID { get; set; }
         [Display(Name = "Category")]
         public string? CategoryName { get; set; }
+        public string? CategoryObjectId { get; set; }
     }
 }

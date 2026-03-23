@@ -25,16 +25,12 @@ namespace WebAPI.Services.IServices
         // és hogy az adatforrás támogatja-e a lekérdezéseket.
         IEnumerable<ProductDto> GetAll();
 
-        // GET a product by id
-        ProductDto GetById(int id);
+        ProductDto GetById(string id);
 
-        // Create a new product
         void Create(ProductDto productDto);
 
-        // Update an existing product
-        void Update(int id, ProductDto productDto);
+        void Update(string id, ProductDto productDto);
 
-        // Delete a product by id
-        void Delete(int id);
+        void Delete(string id);
     }
 }

@@ -25,8 +25,8 @@ else
             <PropertyColumn Property="@(p => p.Stock)" Title="Stock" />
             <PropertyColumn Property="@(p => p.CategoryName)" Title="Category" />
             <TemplateColumn Title="Actions">
-                <a href="/product/edit/@context.ProductID" class="btn btn-sm btn-warning">Edit</a>
-                <button class="btn btn-sm btn-danger" @onclick="() => DeleteProduct(context.ProductID)">Delete</button>
+                <a href="/product/edit/@context.Id" class="btn btn-sm btn-warning">Edit</a>
+                <button class="btn btn-sm btn-danger" @onclick="() => DeleteProduct(context.Id)">Delete</button>
             </TemplateColumn>
         </QuickGrid>
     </div>
@@ -61,12 +61,15 @@ else
         }
     }
 
-    private async Task DeleteProduct(int id)
+    private async Task DeleteProduct(string? id)
     {
-        var response = await Http.DeleteAsync($"product/{id}");
-        if (response.IsSuccessStatusCode)
+        if (!string.IsNullOrEmpty(id))
         {
-            await LoadProducts();
+            var response = await Http.DeleteAsync($"product/{id}");
+            if (response.IsSuccessStatusCode)
+            {
+                await LoadProducts();
+            }
         }
     }
 }

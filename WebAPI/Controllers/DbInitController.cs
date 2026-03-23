@@ -2,8 +2,6 @@ using Microsoft.AspNetCore.Mvc;
 using WebAPI.Data;
 using WebAPI.Services;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-
 namespace WebAPI.Controllers
 {
     [Route("api/[controller]")]
@@ -18,10 +16,10 @@ namespace WebAPI.Controllers
         }
         
         [HttpPost("add")]
-        public void Add()
+        public async Task Add()
         {
-        var dbInit = new DbInit(_context);
-            dbInit.Initial();
+            var dbInit = new DbInit(_context);
+            await dbInit.InitialAsync();
         }
     }
 }

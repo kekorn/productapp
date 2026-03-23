@@ -1,28 +1,41 @@
-using Microsoft.EntityFrameworkCore;
+using MongoDB.Driver;
 using Shared.Models;
 
 namespace AuthAPI.Data
 {
-    public class AppDbContext : DbContext
+    public class AppDbContext
     {
-        public AppDbContext()
+        private readonly IMongoDatabase _database;
+
+        public AppDbContext(IMongoClient mongoClient, string databaseName = "ProductApp")
         {
+            _database = mongoClient.GetDatabase(databaseName);
         }
 
-        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
+        public IMongoCollection<User> Users => _database.GetCollection<User>("Users");
+
+        public async Task InitializeAsync()
         {
+            // Create collections if they don't exist
+            try
+            {
+                var collections = await _database.ListCollectionNamesAsync();
+                var collectionNames = await collections.ToListAsync();
+
+                if (!collectionNames.Contains("Users"))
+                {
+                    await _database.CreateCollectionAsync("Users");
+                }
+            }
+            catch
+            {
+                // Collection might already exist
+            }
         }
 
-        // A Lazy loading használatához telepíteni kell a Microsoft.EntityFrameworkCore.Proxies csomagot, és engedélyezni kell a lazy loading proxy-k használatát
-        // az OnConfiguring metódusban az AppDbContext osztályban.
-        // UseLazyLoadingProxies() metódus használata a lazy loading engedélyezéséhez az AppDbContext osztályban.
-        // A kapcsolódó entitásoknak virtual kulcsszóval kell rendelkezniük a modellünk navigációs tulajdonságokban, hogy a lazy loading muködjön. (Foreign Key)
-
-        public DbSet<MyUser> MyUsers { get; set; }
-
-        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        //{
-        //    optionsBuilder.UseLazyLoadingProxies().UseSqlServer("Server=.\\sqlexpress;Database=ProductApp;Trusted_Connection=True;Encrypt=False;TrustServerCertificate=True");
-        //}
+        public void SaveChanges()
+        {
+            // MongoDB automatically saves changes
+        }
     }
 }

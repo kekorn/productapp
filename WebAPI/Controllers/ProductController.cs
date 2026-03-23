@@ -5,9 +5,6 @@ using Shared.Models;
 using WebAPI.Services;
 using WebAPI.Security;
 
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-
 namespace WebAPI.Controllers
 {
     [Route("api/[controller]")]
@@ -22,7 +19,7 @@ namespace WebAPI.Controllers
             context = _context;
             productservice = new ProductService(context);
         }
-        // GET: api/<ProductController>
+
         [HttpGet]
         public IActionResult Get()
         {
@@ -34,9 +31,8 @@ namespace WebAPI.Controllers
             return Ok(products);
         }
 
-        // GET api/<PRoductController>/5
         [HttpGet("{id}")]
-        public IActionResult Get(int id)
+        public IActionResult Get(string id)
         {
             ProductDto product = productservice.GetById(id);
             if (product == null)
@@ -46,25 +42,22 @@ namespace WebAPI.Controllers
             return Ok(product);
         }
 
-        // POST api/<PRoductController>
         [HttpPost]
         public IActionResult Create([FromBody] ProductDto productDto)
         {
             productservice.Create(productDto);
-            return CreatedAtAction(nameof(Get), new { id = productDto.ProductID }, productDto);
+            return CreatedAtAction(nameof(Get), productDto);
         }
 
-        // PUT api/<PRoductController>/5
         [HttpPut("{id}")]
-        public IActionResult Update(int id, [FromBody] ProductDto productDto)
+        public IActionResult Update(string id, [FromBody] ProductDto productDto)
         {
             productservice.Update(id, productDto);
             return NoContent();
         }
 
-        // DELETE api/<PRoductController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public void Delete(string id)
         {
             productservice.Delete(id);
         }

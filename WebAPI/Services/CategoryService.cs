@@ -1,15 +1,15 @@
-using Microsoft.EntityFrameworkCore;
 using Shared.Dto;
 using Shared.Models;
 using WebAPI.Data;
 using WebAPI.Services.IServices;
+using MongoDB.Driver;
 
 namespace WebAPI.Services
 {
-
     public class CategoryService : ICategoryService
     {
         private readonly AppDbContext context;
+        
         public CategoryService(AppDbContext _context)
         {
             context = _context;
@@ -17,54 +17,47 @@ namespace WebAPI.Services
 
         public IEnumerable<CategoryDto> GetAll()
         {
-            IEnumerable<CategoryDto> categories = context.Categories.Select(c => new CategoryDto
+            var categories = context.Categories.Find(_ => true).ToList();
+            return categories.Select(c => new CategoryDto
             {
-                CategoryID = c.CategoryID,
+                Id = c.Id,
+                CategoryID = c.Id?.GetHashCode() ?? 0,
                 CName = c.CName
             }).ToList();
-
-            return categories;
         }
 
-        public CategoryDto GetById(int id)
+        public CategoryDto GetById(string id)
         {
-            var category = context.Categories.Where(c => c.CategoryID == id).Select(c => new CategoryDto
-            {
-                CategoryID = c.CategoryID,
-                CName = c.CName
-            }).FirstOrDefault();
+            var category = context.Categories.Find(c => c.Id == id).FirstOrDefault();
+            if (category == null)
+                return null;
 
-            return category;
+            return new CategoryDto
+            {
+                Id = category.Id,
+                CategoryID = category.Id?.GetHashCode() ?? 0,
+                CName = category.CName
+            };
         }
 
         public void Create(CategoryDto categoryDto)
         {
-            Category category = new Category()
+            var category = new Category
             {
                 CName = categoryDto.CName
             };
-            context.Categories.Add(category);
-            context.SaveChanges();
+            context.Categories.InsertOneAsync(category).Wait();
         }
 
-        public void Update(int id, CategoryDto categoryDto)
+        public void Update(string id, CategoryDto categoryDto)
         {
-            Category category = context.Categories.Find(id);
-            if (category != null)
-            {
-                category.CName = categoryDto.CName;
-                context.SaveChanges();
-            }
+            var update = Builders<Category>.Update.Set(c => c.CName, categoryDto.CName);
+            context.Categories.UpdateOneAsync(c => c.Id == id, update).Wait();
         }
 
-        public void Delete(int id)
+        public void Delete(string id)
         {
-            Category category = context.Categories.Find(id);
-            if (category != null)
-            {
-                context.Categories.Remove(category);
-                context.SaveChanges();
-            }
+            context.Categories.DeleteOneAsync(c => c.Id == id).Wait();
         }
     }
 }

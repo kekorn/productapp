@@ -1,33 +1,44 @@
-using Microsoft.EntityFrameworkCore;
+using MongoDB.Driver;
 using WebAPI.Data;
 using WebAPI.Services;
-using WebAPI.Security;
-
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var connectionString = builder.Configuration.GetConnectionString("dbConnect");
+var mongoConnectionString = builder.Configuration.GetConnectionString("MongoDB") 
+    ?? "mongodb://mongodb:27017";
+var mongoDatabaseName = builder.Configuration["MongoDB:DatabaseName"] ?? "ProductApp";
 
-builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlServer(connectionString));
+// Configure MongoDB
+var mongoClient = new MongoClient(mongoConnectionString);
+builder.Services.AddSingleton<IMongoClient>(mongoClient);
+builder.Services.AddScoped(sp => new AppDbContext(
+    sp.GetRequiredService<IMongoClient>(),
+    mongoDatabaseName
+));
 
-
-
-// Add services to the container.
+builder.Services.AddScoped<DbInit>();
 
 builder.Services.AddControllers().AddJsonOptions(options =>
 {
     options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
-}); 
+});
 
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// Initialize MongoDB collections
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    await dbContext.InitializeAsync();
+    
+    var dbInit = scope.ServiceProvider.GetRequiredService<DbInit>();
+    await dbInit.InitialAsync();
+}
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -35,9 +46,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
 app.UseAuthorization();
-
 app.MapControllers();
 
 app.Run();

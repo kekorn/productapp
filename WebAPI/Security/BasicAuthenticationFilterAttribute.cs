@@ -22,10 +22,13 @@ namespace WebAPI.Security
 
                     if (credentials.Length == 2
                         && !string.IsNullOrWhiteSpace(credentials[0])
-                        && !string.IsNullOrWhiteSpace(credentials[1])
-                        && APISecurity.Validate(credentials[0], credentials[1]))
+                        && !string.IsNullOrWhiteSpace(credentials[1]))
                     {
-                        return;
+                        var apiSecurity = context.HttpContext.RequestServices.GetService<APISecurity>();
+                        if (apiSecurity != null && apiSecurity.Validate(credentials[0], credentials[1]))
+                        {
+                            return;
+                        }
                     }
                 }
                 catch

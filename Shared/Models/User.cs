@@ -1,10 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
 namespace Shared.Models
 {
-    public class MyUser
+    public class User
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]

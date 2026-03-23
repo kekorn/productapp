@@ -1,102 +1,85 @@
-using Microsoft.EntityFrameworkCore;
 using WebAPI.Data;
 using Shared.Dto;
 using Shared.Models;
 using WebAPI.Services.IServices;
+using MongoDB.Driver;
 
 namespace WebAPI.Services
 {
     public class ProductService : IProductService
     {
         private readonly AppDbContext context;
+        
         public ProductService(AppDbContext _context)
         {
             context = _context;
         }
+
         public IEnumerable<ProductDto> GetAll()
         {
-            //List<ProductDto> products = new();
-            //foreach (var item in context.Products)
-            //{
-            //    products.Add(new ProductDto
-            //    {
-            //        ProductID = item.ProductID,
-            //        ProductName = item.PName,
-            //        Price = item.Price,
-            //        Stock = item.Stock,
-            //        CategoryName = item.Category.CName
-            //    });
-            //}
-
-            // Egyszerusített megadás lambda függvénnyel:
-            // A Select() metódus segítségével minden Product objektumot egy új ProductDto objektummá alakítunk át,
-            // majd a ToList() metódussal egy listává alakítjuk az eredményt.
-            IEnumerable<ProductDto> products = context.Products.Select(p => new ProductDto
+            var products = context.Products.Find(_ => true).ToList();
+            var categories = context.Categories.Find(_ => true).ToList();
+            
+            return products.Select(p => new ProductDto
             {
-                ProductID = p.ProductID,
+                Id = p.Id,
+                ProductID = p.Id?.GetHashCode() ?? 0,
                 ProductName = p.PName,
                 Price = p.Price,
-                CategoryID = p.CategoryID,
-                CategoryName = p.Category.CName
+                Stock = p.Stock,
+                CategoryID = categories.FirstOrDefault(c => c.Id == p.CategoryId)?.Id?.GetHashCode() ?? 0,
+                CategoryObjectId = p.CategoryId,
+                CategoryName = categories.FirstOrDefault(c => c.Id == p.CategoryId)?.CName ?? "Unknown"
             }).ToList();
-
-            return products;
         }
 
-        public ProductDto? GetById(int id)
+        public ProductDto GetById(string id)
         {
-            Product? product = context.Products.Find(id);
-            if (product != null)
+            var product = context.Products.Find(p => p.Id == id).FirstOrDefault();
+            if (product == null)
+                return null;
+
+            var category = context.Categories.Find(c => c.Id == product.CategoryId).FirstOrDefault();
+
+            return new ProductDto
             {
-                ProductDto productDto = new ProductDto()
-                {
-                    ProductID = product.ProductID,
-                    ProductName = product.PName,
-                    Price = product.Price,
-                    Stock = product.Stock,
-                    CategoryID = product.CategoryID,
-                    CategoryName = product.Category.CName
-                };
-                return productDto;
-            }
-            return null;
+                Id = product.Id,
+                ProductID = product.Id?.GetHashCode() ?? 0,
+                ProductName = product.PName,
+                Price = product.Price,
+                Stock = product.Stock,
+                CategoryID = category?.Id?.GetHashCode() ?? 0,
+                CategoryObjectId = product.CategoryId,
+                CategoryName = category?.CName ?? "Unknown"
+            };
         }
 
         public void Create(ProductDto productDto)
         {
-            Product product = new Product()
+            var product = new Product
             {
                 PName = productDto.ProductName,
                 Price = productDto.Price,
                 Stock = productDto.Stock,
-                CategoryID = productDto.CategoryID
+                CategoryId = productDto.CategoryObjectId
             };
-            context.Products.Add(product);
-            context.SaveChanges();
+            context.Products.InsertOneAsync(product).Wait();
         }
 
-        public void Update(int id, ProductDto productDto)
+        public void Update(string id, ProductDto productDto)
         {
+            var update = Builders<Product>.Update
+                .Set(p => p.PName, productDto.ProductName)
+                .Set(p => p.Price, productDto.Price)
+                .Set(p => p.Stock, productDto.Stock)
+                .Set(p => p.CategoryId, productDto.CategoryObjectId);
 
-            Product product = context.Products.Find(id);
-            if (product != null)
-            {
-                product.PName = productDto.ProductName;
-                product.Price = productDto.Price;
-                product.Stock = productDto.Stock;
-                product.CategoryID = productDto.CategoryID;
-                context.SaveChanges();
-            }
+            context.Products.UpdateOneAsync(p => p.Id == id, update).Wait();
         }
 
-        public void Delete(int id)
+        public void Delete(string id)
         {
-            Product product = context.Products.Find(id);
-            if (product != null)
-            {
-                context.Products.Remove(product);
-                context.SaveChanges();
-            }
+            context.Products.DeleteOneAsync(p => p.Id == id).Wait();
         }
     }
 }

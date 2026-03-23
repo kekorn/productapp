@@ -16,12 +16,13 @@ namespace WebAPI.Controllers
     {
         private readonly AppDbContext context;
         private readonly CategoryService categoryService;
+        
         public CategoryController(AppDbContext _context)
         {
             context = _context;
             categoryService = new CategoryService(context);
         }
-        // GET: api/<CategoryController>
+
         [HttpGet]
         public IActionResult Get()
         {
@@ -33,9 +34,8 @@ namespace WebAPI.Controllers
             return Ok(categories);
         }
 
-        // GET api/<CategoryController>/5
         [HttpGet("{id}")]
-        public IActionResult Get(int id)
+        public IActionResult Get(string id)
         {
             CategoryDto category = categoryService.GetById(id);
             if (category == null)
@@ -44,25 +44,23 @@ namespace WebAPI.Controllers
             }
             return Ok(category);
         }
-        // POST api/<CategoryController>
+
         [HttpPost]
         public IActionResult Create([FromBody] CategoryDto categoryDto)
         {
             categoryService.Create(categoryDto);
-            return CreatedAtAction(nameof(Get), new { id = categoryDto.CategoryID }, categoryDto);
+            return CreatedAtAction(nameof(Get), categoryDto);
         }
 
-        // PUT api/<CategoryController>/5
         [HttpPut("{id}")]
-        public IActionResult Update(int id, [FromBody] CategoryDto categoryDto)
+        public IActionResult Update(string id, [FromBody] CategoryDto categoryDto)
         {
             categoryService.Update(id, categoryDto);
             return NoContent();
         }
 
-        // DELETE api/<CategoryController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public void Delete(string id)
         {
             categoryService.Delete(id);
         }

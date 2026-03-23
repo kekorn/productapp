@@ -36,11 +36,11 @@ else
 
         <div class="mb-3">
             <label for="category" class="form-label">Category</label>
-            <InputSelect id="category" class="form-control" @bind-Value="product.CategoryID">
-                <option value="0">-- Select Category --</option>
+            <InputSelect id="category" class="form-control" @bind-Value="product.CategoryObjectId">
+                <option value="">-- Select Category --</option>
                 @foreach (var cat in categories)
                 {
-                    <option value="@cat.CategoryID">@cat.CName</option>
+                    <option value="@cat.Id">@cat.CName</option>
                 }
             </InputSelect>
             <ValidationMessage For="@(() => product.CategoryID)" />
@@ -62,7 +62,7 @@ else
 
     private async Task HandleValidSubmit()
     {
-        if (product.CategoryID > 0)
+        if (!string.IsNullOrEmpty(product.CategoryObjectId))
         {
             var response = await Http.PostAsJsonAsync("product", product);
             if (response.IsSuccessStatusCode)

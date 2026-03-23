@@ -1,0 +1,29 @@
+# docker-compose.override.yml
+# Ez a fájl a .gitignore-ban van, helyi fejlesztéshez használható
+
+services:
+  # MongoDB - helyi fejlesztéshez
+  mongodb:
+    environment:
+      MONGO_INITDB_DATABASE: ProductApp
+    ports:
+      - "27017:27017"
+
+  # WebAPI - debug módban
+  webapi:
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Development"
+      ConnectionStrings__MongoDB: "mongodb://mongodb:27017"
+      MongoDB__DatabaseName: "ProductApp"
+
+  # AuthAPI - debug módban  
+  authapi:
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Development"
+      ConnectionStrings__MongoDB: "mongodb://mongodb:27017"
+      MongoDB__DatabaseName: "ProductApp"
+
+  # BlazorUI - debug módban
+  blazorui:
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Development"

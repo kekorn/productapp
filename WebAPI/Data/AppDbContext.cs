@@ -1,30 +1,51 @@
-using Microsoft.EntityFrameworkCore;
+using MongoDB.Driver;
 using Shared.Models;
 
 namespace WebAPI.Data
 {
-    public class AppDbContext : DbContext
+    public class AppDbContext
     {
-        public AppDbContext()
+        private readonly IMongoDatabase _database;
+
+        public AppDbContext(IMongoClient mongoClient, string databaseName = "ProductApp")
         {
+            _database = mongoClient.GetDatabase(databaseName);
         }
 
-        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
+        public IMongoCollection<Category> Categories => _database.GetCollection<Category>("Categories");
+        public IMongoCollection<Product> Products => _database.GetCollection<Product>("Products");
+        public IMongoCollection<MyUser> MyUsers => _database.GetCollection<MyUser>("MyUsers");
+
+        public async Task InitializeAsync()
         {
+            // Create collections if they don't exist
+            try
+            {
+                var collections = await _database.ListCollectionNamesAsync();
+                var collectionNames = await collections.ToListAsync();
+
+                if (!collectionNames.Contains("Categories"))
+                {
+                    await _database.CreateCollectionAsync("Categories");
+                }
+                if (!collectionNames.Contains("Products"))
+                {
+                    await _database.CreateCollectionAsync("Products");
+                }
+                if (!collectionNames.Contains("MyUsers"))
+                {
+                    await _database.CreateCollectionAsync("MyUsers");
+                }
+            }
+            catch
+            {
+                // Collections might already exist
+            }
         }
 
-        // A Lazy loading használatához telepíteni kell a Microsoft.EntityFrameworkCore.Proxies csomagot, és engedélyezni kell a lazy loading proxy-k használatát
-        // az OnConfiguring metódusban az AppDbContext osztályban.
-        // UseLazyLoadingProxies() metódus használata a lazy loading engedélyezéséhez az AppDbContext osztályban.
-        // A kapcsolódó entitásoknak virtual kulcsszóval kell rendelkezniük a modellünk navigációs tulajdonságokban, hogy a lazy loading muködjön. (Foreign Key)
-
-        public DbSet<Category> Categories { get; set; }
-        public DbSet<Product> Products { get; set; }
-        public DbSet<MyUser> MyUsers { get; set; }
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        public void SaveChanges()
         {
-            optionsBuilder.UseLazyLoadingProxies().UseSqlServer("Server=.\\sqlexpress;Database=ProductApp;Trusted_Connection=True;Encrypt=False;TrustServerCertificate=True");
+            // MongoDB automatically saves changes
         }
     }
 }
