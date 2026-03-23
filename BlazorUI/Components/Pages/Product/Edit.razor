@@ -1,0 +1,78 @@
+@page "/product/edit/{id:int}"
+@inject HttpClient Http
+@inject NavigationManager Navigation
+@using Shared.Dto
+@rendermode InteractiveServer
+
+<h3>Edit Product</h3>
+
+@if (product == null || categories == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <EditForm Model="product" OnValidSubmit="HandleValidSubmit" FormName="editProduct">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <div class="mb-3">
+            <label for="name" class="form-label">Name</label>
+            <InputText id="name" class="form-control" @bind-Value="product.ProductName" />
+            <ValidationMessage For="@(() => product.ProductName)" />
+        </div>
+
+        <div class="mb-3">
+            <label for="price" class="form-label">Price</label>
+            <InputNumber id="price" class="form-control" @bind-Value="product.Price" />
+            <ValidationMessage For="@(() => product.Price)" />
+        </div>
+
+        <div class="mb-3">
+            <label for="stock" class="form-label">Stock</label>
+            <InputNumber id="stock" class="form-control" @bind-Value="product.Stock" />
+            <ValidationMessage For="@(() => product.Stock)" />
+        </div>
+
+        <div class="mb-3">
+            <label for="category" class="form-label">Category</label>
+            <InputSelect id="category" class="form-control" @bind-Value="product.CategoryID">
+                <option value="0">-- Select Category --</option>
+                @foreach (var cat in categories)
+                {
+                    <option value="@cat.CategoryID">@cat.CName</option>
+                }
+            </InputSelect>
+            <ValidationMessage For="@(() => product.CategoryID)" />
+        </div>
+
+        <button type="submit" class="btn btn-primary">Save</button>
+        <a href="/product" class="btn btn-secondary">Cancel</a>
+    </EditForm>
+}
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    private ProductDto? product;
+    private List<CategoryDto>? categories;
+
+    protected override async Task OnInitializedAsync()
+    {
+        product = await Http.GetFromJsonAsync<ProductDto>($"product/{Id}");
+        categories = await Http.GetFromJsonAsync<List<CategoryDto>>("category");
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        if (product != null && product.CategoryID > 0)
+        {
+            var response = await Http.PutAsJsonAsync($"product/{product.ProductID}", product);
+            if (response.IsSuccessStatusCode)
+            {
+                Navigation.NavigateTo("/product");
+            }
+        }
+    }
+}

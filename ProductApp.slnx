@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="ConsoleApp/ConsoleApp.csproj" />
+  <Project Path="BlazorUI/BlazorUI.csproj" />
+  <Project Path="Shared/Shared.csproj" />
+  <Project Path="WebAPI/WebAPI.csproj" />
+</Solution>

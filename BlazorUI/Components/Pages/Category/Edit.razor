@@ -1,0 +1,52 @@
+@page "/category/edit/{id:int}"
+@inject HttpClient Http
+@inject NavigationManager Navigation
+@using Shared.Dto
+@rendermode InteractiveServer
+
+<h3>Edit Category</h3>
+
+@if (category == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <EditForm Model="category" OnValidSubmit="HandleValidSubmit" FormName="editCategory">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <div class="mb-3">
+            <label for="name" class="form-label">Name</label>
+            <InputText id="name" class="form-control" @bind-Value="category.CName" />
+            <ValidationMessage For="@(() => category.CName)" />
+        </div>
+
+        <button type="submit" class="btn btn-primary">Save</button>
+        <a href="/category" class="btn btn-secondary">Cancel</a>
+    </EditForm>
+}
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    private CategoryDto? category;
+
+    protected override async Task OnInitializedAsync()
+    {
+        category = await Http.GetFromJsonAsync<CategoryDto>($"category/{Id}");
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        if (category != null)
+        {
+            var response = await Http.PutAsJsonAsync($"category/{category.CategoryID}", category);
+            if (response.IsSuccessStatusCode)
+            {
+                Navigation.NavigateTo("/category");
+            }
+        }
+    }
+}
