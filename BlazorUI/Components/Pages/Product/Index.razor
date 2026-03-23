@@ -28,8 +28,10 @@
                         <PropertyColumn Property="@(p => p.Stock)" Title="Stock" />
                         <PropertyColumn Property="@(p => p.CategoryName)" Title="Category" />
                         <TemplateColumn Title="Actions" Context="product">
-                            <a href="/product/edit/@product.Id" class="btn btn-sm btn-warning">Edit</a>
-                            <button class="btn btn-sm btn-danger" @onclick="() => DeleteProduct(product.Id)">Delete</button>
+                            <div class="text-end">
+                                <a href="/product/edit/@product.Id" class="btn btn-sm btn-warning">Edit</a>
+                                <button class="btn btn-sm btn-danger" @onclick="() => DeleteProduct(product.Id)">Delete</button>
+                            </div>
                         </TemplateColumn>
                     </QuickGrid>
                 </div>
