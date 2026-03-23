@@ -3,7 +3,6 @@ using WebAPI.Data;
 using Shared.Dto;
 using Shared.Models;
 using WebAPI.Services;
-using WebAPI.Security;
 
 namespace WebAPI.Controllers
 {

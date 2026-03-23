@@ -20,22 +20,23 @@
         }
         else
         {
-            <div class="table-responsive">
-                <QuickGrid Items="@products.AsQueryable()" Pagination="@pagination" Class="table">
-                    <PropertyColumn Property="@(p => p.ProductID)" Title="ID" />
-                    <PropertyColumn Property="@(p => p.ProductName)" Title="Name" />
-                    <PropertyColumn Property="@(p => p.Price)" Title="Price" />
-                    <PropertyColumn Property="@(p => p.Stock)" Title="Stock" />
-                    <PropertyColumn Property="@(p => p.CategoryName)" Title="Category" />
-                    <TemplateColumn Title="Actions" Context="product">
-                        <a href="/product/edit/@product.Id" class="btn btn-sm btn-warning">Edit</a>
-                        <button class="btn btn-sm btn-danger" @onclick="() => DeleteProduct(product.Id)">Delete</button>
-                    </TemplateColumn>
-                </QuickGrid>
-            </div>
+            <div style="max-width: 900px; margin: 0 auto;">
+                <div class="table-responsive">
+                    <QuickGrid Items="@products.AsQueryable()" Pagination="@pagination" Class="table table-sm">
+                        <PropertyColumn Property="@(p => p.ProductName)" Title="Name" />
+                        <PropertyColumn Property="@(p => p.Price)" Title="Price" />
+                        <PropertyColumn Property="@(p => p.Stock)" Title="Stock" />
+                        <PropertyColumn Property="@(p => p.CategoryName)" Title="Category" />
+                        <TemplateColumn Title="Actions" Context="product">
+                            <a href="/product/edit/@product.Id" class="btn btn-sm btn-warning">Edit</a>
+                            <button class="btn btn-sm btn-danger" @onclick="() => DeleteProduct(product.Id)">Delete</button>
+                        </TemplateColumn>
+                    </QuickGrid>
+                </div>
 
-            <div class="mt-3">
-                <Paginator State="@pagination" />
+                <div class="mt-3">
+                    <Paginator State="@pagination" />
+                </div>
             </div>
         }
     </Authorized>

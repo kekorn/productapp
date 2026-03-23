@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Mvc;
 using Shared.Dto;
 using Shared.Models;
 using WebAPI.Data;
-using WebAPI.Security;
 using WebAPI.Services;
 using WebAPI.Services.IServices;
 
