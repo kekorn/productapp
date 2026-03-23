@@ -47,7 +47,18 @@ else
 
     private async Task LoadProducts()
     {
-        products = await Http.GetFromJsonAsync<List<ProductDto>>("product");
+        try
+        {
+            products = await Http.GetFromJsonAsync<List<ProductDto>>("product") ?? new List<ProductDto>();
+        }
+        catch (HttpRequestException)
+        {
+            products = new List<ProductDto>();
+        }
+        catch (Exception)
+        {
+            products = new List<ProductDto>();
+        }
     }
 
     private async Task DeleteProduct(int id)

@@ -1,0 +1,12 @@
+@page "/logout"
+@rendermode InteractiveServer
+@inject AuthenticationStateProvider AuthStateProvider
+@inject NavigationManager NavManager
+@using BlazorUI.Auth
+@code {
+    protected override void OnInitialized()
+    {
+        ((CustomAuthStateProvider)AuthStateProvider).MarkUserAsLoggedOut();
+        NavManager.NavigateTo("/");
+    }
+}

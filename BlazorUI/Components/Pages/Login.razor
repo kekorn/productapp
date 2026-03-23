@@ -1,0 +1,64 @@
+@page "/login"
+@rendermode InteractiveServer
+@inject HttpClient Http
+@inject AuthenticationStateProvider AuthStateProvider
+@inject IConfiguration Config
+@using Shared.Models
+@using BlazorUI.Auth
+@inject NavigationManager NavManager
+
+<h3>Login</h3>
+
+<div class="form-group mb-3">
+    <label>Username</label>
+    <input @bind="loginRequest.Username" class="form-control" />
+</div>
+<div class="form-group mb-3">
+    <label>Password</label>
+    <input type="password" @bind="loginRequest.Password" class="form-control" />
+</div>
+<button class="btn btn-primary" @onclick="HandleLogin">Login</button>
+
+@if (!string.IsNullOrEmpty(errorMessage))
+{
+    <div class="alert alert-danger mt-3">@errorMessage</div>
+}
+
+@code {
+    private LoginRequest loginRequest = new();
+    private string errorMessage;
+    
+    // Create an HttpClient specifically for Auth to bypass SSL locally if needed
+    private HttpClient _authClient = new HttpClient(new HttpClientHandler
+    {
+        ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true
+    });
+
+    private async Task HandleLogin()
+    {
+        errorMessage = "";
+        try
+        {
+            var authUrl = Config["AuthApiUrl"] ?? "https://localhost:7297";
+            var response = await _authClient.PostAsJsonAsync($"{authUrl}/login", loginRequest);
+            
+            if (response.IsSuccessStatusCode)
+            {
+                var result = await response.Content.ReadFromJsonAsync<AuthResponse>();
+                if (result != null)
+                {
+                    ((CustomAuthStateProvider)AuthStateProvider).MarkUserAsAuthenticated(loginRequest.Username, result.Role);
+                    NavManager.NavigateTo("/");
+                }
+            }
+            else
+            {
+                errorMessage = $"Bejelentkezés sikertelen: hibás felhasználónév vagy jelszó. ({response.StatusCode})";
+            }
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"Hiba a kapcsolatban: {ex.Message}";
+        }
+    }
+}

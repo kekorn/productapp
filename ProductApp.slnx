@@ -2,4 +2,5 @@
   <Project Path="BlazorUI/BlazorUI.csproj" />
   <Project Path="Shared/Shared.csproj" />
   <Project Path="WebAPI/WebAPI.csproj" />
+  <Project Path="AuthAPI/AuthAPI.csproj" />
 </Solution>

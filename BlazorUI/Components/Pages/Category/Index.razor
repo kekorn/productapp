@@ -44,7 +44,18 @@ else
 
     private async Task LoadCategories()
     {
-        categories = await Http.GetFromJsonAsync<List<CategoryDto>>("category");
+        try
+        {
+            categories = await Http.GetFromJsonAsync<List<CategoryDto>>("category") ?? new List<CategoryDto>();
+        }
+        catch (HttpRequestException)
+        {
+            categories = new List<CategoryDto>(); // Ha 404 vagy egyéb hiba van, akkor üres listát adunk
+        }
+        catch (Exception)
+        {
+            categories = new List<CategoryDto>();
+        }
     }
 
     private async Task DeleteCategory(int id)

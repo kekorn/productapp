@@ -43,13 +43,13 @@ namespace WebAPI.Services
             context.Products.AddRange(products);
             context.SaveChanges();
 
-            List<MyUser> users = new List<MyUser>
-            {
-                new MyUser { Username = "admin", Password = "12345" },
-                new MyUser { Username = "scott",Password="tiger" }
-            };
-            context.MyUsers.AddRange(users);
-            context.SaveChanges();
+            //List<MyUser> users = new List<MyUser>
+            //{
+            //    new MyUser { Username = "admin", Password = "12345" },
+            //    new MyUser { Username = "scott",Password="tiger" }
+            //};
+            //context.MyUsers.AddRange(users);
+            //context.SaveChanges();
         }
     }
 }

@@ -1,4 +1,6 @@
 using BlazorUI.Components;
+using Microsoft.AspNetCore.Components.Authorization;
+using BlazorUI.Auth;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -6,11 +8,21 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
-// Beállítjuk a HttpClient-et, hogy olvassa ki az appsettings.json-ből az URL-t
-builder.Services.AddScoped(sp => new HttpClient 
-{ 
-    BaseAddress = new Uri(builder.Configuration["ApiBaseUrl"]!) 
+// Beállítjuk a HttpClient-et
+builder.Services.AddScoped(sp => 
+{
+    var handler = new HttpClientHandler
+    {
+        ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true
+    };
+    return new HttpClient(handler)
+    { 
+        BaseAddress = new Uri(builder.Configuration["ApiBaseUrl"]!) 
+    };
 });
+
+builder.Services.AddAuthorizationCore();
+builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthStateProvider>();
 
 var app = builder.Build();
 
