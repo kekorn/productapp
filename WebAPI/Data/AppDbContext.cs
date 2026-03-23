@@ -14,7 +14,6 @@ namespace WebAPI.Data
 
         public IMongoCollection<Category> Categories => _database.GetCollection<Category>("Categories");
         public IMongoCollection<Product> Products => _database.GetCollection<Product>("Products");
-        public IMongoCollection<MyUser> MyUsers => _database.GetCollection<MyUser>("MyUsers");
 
         public async Task InitializeAsync()
         {
@@ -31,10 +30,6 @@ namespace WebAPI.Data
                 if (!collectionNames.Contains("Products"))
                 {
                     await _database.CreateCollectionAsync("Products");
-                }
-                if (!collectionNames.Contains("MyUsers"))
-                {
-                    await _database.CreateCollectionAsync("MyUsers");
                 }
             }
             catch

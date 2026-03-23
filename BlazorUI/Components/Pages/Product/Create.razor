@@ -2,54 +2,64 @@
 @inject HttpClient Http
 @inject NavigationManager Navigation
 @using Shared.Dto
+@using Microsoft.AspNetCore.Components.Authorization
 @rendermode InteractiveServer
 
-<h3>Create Product</h3>
+<AuthorizeView>
+    <Authorized>
+        <h3>Create Product</h3>
 
-@if (categories == null)
-{
-    <p><em>Loading categories...</em></p>
-}
-else
-{
-    <EditForm Model="product" OnValidSubmit="HandleValidSubmit" FormName="createProduct">
-        <DataAnnotationsValidator />
-        <ValidationSummary />
+        @if (categories == null)
+        {
+            <p><em>Loading categories...</em></p>
+        }
+        else
+        {
+            <EditForm Model="product" OnValidSubmit="HandleValidSubmit" FormName="createProduct" Context="editContext">
+                <DataAnnotationsValidator />
+                <ValidationSummary />
 
-        <div class="mb-3">
-            <label for="name" class="form-label">Name</label>
-            <InputText id="name" class="form-control" @bind-Value="product.ProductName" />
-            <ValidationMessage For="@(() => product.ProductName)" />
+                <div class="mb-3">
+                    <label for="name" class="form-label">Name</label>
+                    <InputText id="name" class="form-control" @bind-Value="product.ProductName" />
+                    <ValidationMessage For="@(() => product.ProductName)" />
+                </div>
+
+                <div class="mb-3">
+                    <label for="price" class="form-label">Price</label>
+                    <InputNumber id="price" class="form-control" @bind-Value="product.Price" />
+                    <ValidationMessage For="@(() => product.Price)" />
+                </div>
+
+                <div class="mb-3">
+                    <label for="stock" class="form-label">Stock</label>
+                    <InputNumber id="stock" class="form-control" @bind-Value="product.Stock" />
+                    <ValidationMessage For="@(() => product.Stock)" />
+                </div>
+
+                <div class="mb-3">
+                    <label for="category" class="form-label">Category</label>
+                    <InputSelect id="category" class="form-control" @bind-Value="product.CategoryObjectId">
+                        <option value="">-- Select Category --</option>
+                        @foreach (var cat in categories)
+                        {
+                            <option value="@cat.Id">@cat.CName</option>
+                        }
+                    </InputSelect>
+                    <ValidationMessage For="@(() => product.CategoryObjectId)" />
+                </div>
+
+                <button type="submit" class="btn btn-primary">Save</button>
+                <a href="/product" class="btn btn-secondary">Cancel</a>
+            </EditForm>
+        }
+    </Authorized>
+    <NotAuthorized>
+        <div class="alert alert-danger">
+            You must be logged in to create products. <a href="/login">Login here</a>.
         </div>
-
-        <div class="mb-3">
-            <label for="price" class="form-label">Price</label>
-            <InputNumber id="price" class="form-control" @bind-Value="product.Price" />
-            <ValidationMessage For="@(() => product.Price)" />
-        </div>
-
-        <div class="mb-3">
-            <label for="stock" class="form-label">Stock</label>
-            <InputNumber id="stock" class="form-control" @bind-Value="product.Stock" />
-            <ValidationMessage For="@(() => product.Stock)" />
-        </div>
-
-        <div class="mb-3">
-            <label for="category" class="form-label">Category</label>
-            <InputSelect id="category" class="form-control" @bind-Value="product.CategoryObjectId">
-                <option value="">-- Select Category --</option>
-                @foreach (var cat in categories)
-                {
-                    <option value="@cat.Id">@cat.CName</option>
-                }
-            </InputSelect>
-            <ValidationMessage For="@(() => product.CategoryID)" />
-        </div>
-
-        <button type="submit" class="btn btn-primary">Save</button>
-        <a href="/product" class="btn btn-secondary">Cancel</a>
-    </EditForm>
-}
+    </NotAuthorized>
+</AuthorizeView>
 
 @code {
     private ProductDto product = new ProductDto();

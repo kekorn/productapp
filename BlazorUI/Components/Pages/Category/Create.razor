@@ -2,23 +2,33 @@
 @inject HttpClient Http
 @inject NavigationManager Navigation
 @using Shared.Dto
+@using Microsoft.AspNetCore.Components.Authorization
 @rendermode InteractiveServer
 
-<h3>Create Category</h3>
+<AuthorizeView>
+    <Authorized>
+        <h3>Create Category</h3>
 
-<EditForm Model="category" OnValidSubmit="HandleValidSubmit" FormName="createCategory">
-    <DataAnnotationsValidator />
-    <ValidationSummary />
+        <EditForm Model="category" OnValidSubmit="HandleValidSubmit" FormName="createCategory" Context="editContext">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
 
-    <div class="mb-3">
-        <label for="name" class="form-label">Name</label>
-        <InputText id="name" class="form-control" @bind-Value="category.CName" />
-        <ValidationMessage For="@(() => category.CName)" />
-    </div>
+            <div class="mb-3">
+                <label for="name" class="form-label">Name</label>
+                <InputText id="name" class="form-control" @bind-Value="category.CName" />
+                <ValidationMessage For="@(() => category.CName)" />
+            </div>
 
-    <button type="submit" class="btn btn-primary">Save</button>
-    <a href="/category" class="btn btn-secondary">Cancel</a>
-</EditForm>
+            <button type="submit" class="btn btn-primary">Save</button>
+            <a href="/category" class="btn btn-secondary">Cancel</a>
+        </EditForm>
+    </Authorized>
+    <NotAuthorized>
+        <div class="alert alert-danger">
+            You must be logged in to create categories. <a href="/login">Login here</a>.
+        </div>
+    </NotAuthorized>
+</AuthorizeView>
 
 @code {
     private CategoryDto category = new CategoryDto();

@@ -9,10 +9,10 @@ namespace Shared.Dto
         public string ProductName { get; set; }
         public float Price { get; set; }
         public int Stock { get; set; }
-        [Range(1, int.MaxValue, ErrorMessage = "Please select a category.")]
         public int CategoryID { get; set; }
         [Display(Name = "Category")]
         public string? CategoryName { get; set; }
+        [Required(ErrorMessage = "Please select a category.")]
         public string? CategoryObjectId { get; set; }
     }
 }
