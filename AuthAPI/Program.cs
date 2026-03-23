@@ -5,7 +5,7 @@ using Shared.Models;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using WebAPI.Data; // Ensure we match AppDbContext namespace which is WebAPI.Data
+using AuthAPI.Data; 
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,7 +13,14 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddCors();
 
-builder.Services.AddDbContext<AppDbContext>();
+//builder.Services.AddDbContext<AppDbContext>();
+
+
+var connectionString = builder.Configuration.GetConnectionString("dbConnect");
+
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseSqlServer(connectionString));
+
 
 var key = Encoding.ASCII.GetBytes("ThisIsAMySuperSecretKeyForJWTTokenGenerationsInDotNet8");
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
