@@ -1,126 +1,137 @@
-# Docker Containerizáció - ProductApp
+# Docker
 
-## Áttekintés
+## Minta környezet kialakítása:
+```
+mkdir -p /var/www/html 
+echo hello from docker >> /var/www/html/index.html
 
-Az alkalmazás teljes Docker containerizációja. A megoldás a következő komponenseket tartalmazza:
+vagy 
 
-- **BlazorUI**: Blazor webalkalmás (port: 8080)
-- **WebAPI**: Termék API (port: 7211)
-- **AuthAPI**: Autentikációs API (port: 7297)
-- **SQL Server**: Adatbázis (port: 1433)
+New-Item -ItemType Directory -Force -Path "./var/www/html"
+"hello from docker" | Out-File -FilePath "./var/www/html/index.html" -Encoding utf8 -Append
 
-## Előfeltételek
+Docker konténer létrehozása:
+docker run -d -p 8081:80 --name="myapache" -v /var/www/html:/var/www/html httpd
+```
+**Konténer kezelés:**
+- `docker ps`: Futó konténerek listázása
+- `docker ps -a`: Összes konténer listázása
+- `docker stop <id>`: Konténer leállítása: 
+- `docker start <id>`: Konténer indítása: 
+- `docker restart <id>`: Konténer újraindítása: 
+- `docker kill <id>`: Konténer erőltetett bezárása
+- `docker rm <id>`: Konténer törlése
+- `docker rm -f <id>`: Konténer törlése, ha fut, akkor előbb leállítja
+- `docker run -d --name mycontainer myimage`: Konténer indítása egy image-ből
+- `docker run -d --name mycontainer -p 8080:80 myimage`: Konténer indítása egy image-ből, port mappinggel   
+- `docker run -d --name mycontainer -v /host/path:/container/path myimage`: Konténer indítása egy image-ből, volume mappinggel
 
-- Docker Desktop telepítve és futtatva
-- Docker Compose telepítve
+**Konténer interakció:**
+- `docker exec -it <id> sh`: Interaktív shell megnyitása a konténerben
+- `docker cp <id>:/path/in/container /path/on/host`: Fájl másolása a konténerből a gazda gépre
+- `docker cp /path/on/host <id>:/path/in/container`: Fájl másolása a gazda gépről a konténerbe
+- `docker attach <id>`: Csatlakozás egy futó konténerhez (CTRL+P, CTRL+Q a leváláshoz)
+- `docker commit <id> myimage`: Konténer állapotának mentése egy új image-be
+- `docker save <id> > mycontainer.tar`: Konténer mentése egy tar fájlba
+- `docker load < mycontainer.tar`: Konténer betöltése egy tar fájlból
+- `docker export <id> > mycontainer.tar`: Konténer fájlrendszerének exportálása egy tar fájlba
+- `docker import mycontainer.tar`: Konténer fájlrendszerének importálása egy tar fájlból egy új image-be
+- `buildah`: Konténer imagek építésére szolgáló eszköz, amely lehetővé teszi a Dockerfile nélküli image építést is, és nem igényel démon futtatását.
+- `docker build -t myimage .`: Docker image építése a jelenlegi könyvtárban található Dockerfile alapján, és elnevezése "myimage"-re
 
-## Indítás
+**Konténer információk:**
+- `docker logs <id>`: Konténer naplóinak megtekintése
+- `docker logs -f <id>`: Konténer naplóinak folyamatos megtekintése (follow)
+- `docker stats <id>`: Konténer erőforrás használatának megtekintése (CPU, memória, hálózat)
+- `buildahost <id>`: Konténer host információinak megtekintése
+- `docker port <id>`: Konténer portjainak megtekintése
+- `docker top <id>`: Konténerben futó folyamatok megtekintése
+- `docker inspect <id>`: Konténer részletes információinak megtekintése
+- `docker inspect --format='{{.NetworkSettings.IPAddress}}' <id>`: Konténer IP címének lekérdezése
+- `docker inspect --format='{{.State.Pid}}' <id>`: Konténer PID-jének lekérdezése
+- `ps`: Gazda operációs rendszer folyamatai
 
-### A teljes alkalmazás indítása:
+**Image kezelés:**
+- `docker image ls`: Docker imagek listázása
+- `docker image inspect <ID>`: dokker image részletes információinak megtekintése
+- `docker history <id>`, vagy `docker history image:tag`: Docker image rétegeinek megtekintése
+- `docker image rm <ID>`: Image törlés
+- `docker image rm -f <ID>`: Image törlés a csatlakoztatott konténerekkel együtt (leállítottakkal is)
+- `docker build -t myimage .`: Docker image építése a jelenlegi könyvtárban található Dockerfile alapján, és elnevezése "myimage"-re
+- `docker build -t myimage:1.0 .`: Docker image építése a jelenlegi könyvtárban található Dockerfile alapján, és elnevezése "myimage" névvel és "1.0" taggel
 
-```bash
-docker-compose up -d
+
+docker run -it busybox 
+(CTRL+P, CTRL+Q ) lecsatlakozás, de fut tovább
+(exit) leállít
+
+## MariaDB konténer indítása:
+*docker run -d --name mydb -e MYSQL_ROOT_PASSWORD=password -p 3306:3306 mariadb*
+```
+docker run: Új konténer indítása egy image-ből.
+Detached mode = a konténer háttérben fut. Ha nem használnád, akkor a MariaDB logsorai betöltenék a terminálodat.
+A konténer neve: mydb. Ez azért fontos, mert így könnyebb:
+    - hivatkozni rá (docker stop mydb, docker logs mydb)
+    - docker compose nélkül is kezelni
+Környezeti változó beállítása a konténerben: -e (environment variable) MYSQL_ROOT_PASSWORD (a MariaDB root felhasználó jelszava) Ez az alapértelmezett módja a MariaDB/Mysql konténer konfigurációjának
+mariadb: Az image neve, amelyből a konténer indul.
+port beállítása: -p 3306:3306
 ```
 
-### Csak az újraépítéssel indítás:
+# Dockerfile alapfelépése
 
-```bash
-docker-compose up -d --build
+**A Dockerfile általában az alábbi fő részekből áll:**
+1. Alapkép megadása – FROM
+2. Készítő információk (opcionális) – LABEL
+3. Fájlok másolása a konténerbe – COPY, ADD
+4. Parancsok futtatása a build során – RUN
+5. Környezeti változók – ENV
+6. Munkakönyvtár beállítása – WORKDIR
+7. Portok megnyitása – EXPOSE
+8. Függőségek telepítése – általában RUN
+9. Indító parancs – CMD vagy ENTRYPOINT
+
+**Példa egy egyszerű Dockerfile-ra:**
 ```
 
-### Logok megtekintése:
+# 1. Alapkép
+FROM node:18-alpine
 
-```bash
-# Összes service loga
-docker-compose logs -f
+# 2. Metaadatok
+LABEL maintainer="kornel@example.com"
+LABEL version="1.0"
 
-# Egy adott service loga
-docker-compose logs -f blazorui
-docker-compose logs -f webapi
-docker-compose logs -f authapi
-docker-compose logs -f sqlserver
+# 3. Munkakönyvtár beállítása
+WORKDIR /app
+
+# 4. Csomagok másolása (COPY, ADD)
+COPY package*.json ./
+
+# 5. Parancs futtatása build közben, pl. telepítés
+RUN npm install
+
+# 6. Környezeti változók beállítása
+ENV APP_ENV=production
+
+# 7. Forráskód másolása
+COPY . .
+
+# 8. Port megnyitása (Ez csak dokumentációs jellegű; a futtatásnál -p kapcsolóval számít.)
+EXPOSE 3000
+
+# 9. Indítás
+CMD ["npm", "start"]
+
+(# 9. Vagy ENTRYPOINT használata (ha a parancs nem változik) kötelezően futó parancs. (Funkcionálisan azonos a CMD-vel, de „fixebb”.) :
+ENTRYPOINT ["python"]
+CMD ["app.py"])
+
 ```
 
-## Leállítás
+|Funkció|CMD|ENTRYPOINT|
+|-------|---|----------|
+|Felülírható docker run paraméterrel|✔️ Igen|❌ Nem|
+|Alkalmas alapértelmezett parancsra|✔️|✔️|
+|„Fix” indító rendszer|❌|✔️|
 
-```bash
-docker-compose down
-```
-
-### A volume-ok törlésével leállítás:
-
-```bash
-docker-compose down -v
-```
-
-## Szolgáltatások elérése
-
-### BlazorUI (Frontend)
-- **URL**: http://localhost:8080
-- **Intern**: http://blazorui:8080
-
-### WebAPI
-- **URL**: http://localhost:7211
-- **Swagger**: http://localhost:7211/swagger/ui
-- **Intern**: http://webapi:8080
-
-### AuthAPI
-- **URL**: http://localhost:7297
-- **Swagger**: http://localhost:7297/swagger/ui
-- **Intern**: http://authapi:8080
-
-### SQL Server
-- **Host**: localhost
-- **Port**: 1433
-- **User**: sa
-- **Password**: ProductApp@2024
-- **Database**: ProductApp
-
-## Environment változók
-
-### BlazorUI
-```
-ASPNETCORE_ENVIRONMENT=Production
-ApiBaseUrl=http://webapi:8080/api/
-AuthApiUrl=http://authapi:8080
-```
-
-### WebAPI & AuthAPI
-```
-ASPNETCORE_ENVIRONMENT=Production
-ConnectionStrings__dbConnect=Server=sqlserver;Database=ProductApp;User Id=sa;Password=ProductApp@2024;Encrypt=False;TrustServerCertificate=True
-```
-
-## Dockerfile-ok
-
-Minden projekt multi-stage buildeket használ:
-1. **Build stage**: Az SDK alapján fordítja a projektet
-2. **Publish stage**: A fordított projektet publikálja
-3. **Runtime stage**: Csak a runtime-ot tartalmazza
-
-## Hálózatkezelés
-
-Az összes service a `productapp-network` Docker hálózaton kommunikál, amely lehetővé teszi a service nevek alapján történő feloldást.
-
-## Adatperzisztencia
-
-Az SQL Server adatai a `sqlserver_data` Docker volume-ban tárolódnak, amely megmarad a container leállítása után.
-
-## Fejlesztés
-
-Helyi fejlesztéshez továbbra is használhatja a közvetlenül futtatott alkalmazásokat. Az `appsettings.json` fájlok Docker container üzemben dolgoznak, de a helyi fejlesztési beállítások módosítása nélkül.
-
-## Hibaelhárítás
-
-### Az alkalmazás nem indul
-1. Ellenőrizze, hogy az összes port elérhető
-2. Tekintse meg a logokat: `docker-compose logs`
-3. Ellenőrizze, hogy a Docker démon fut
-
-### Az adatbázis nem kapcsolódik
-1. Várjon néhány másodpercet az SQL Server indulására
-2. Ellenőrizze a connection stringet
-3. Tekintse meg az SQL Server logokat: `docker-compose logs sqlserver`
-
-### Port ütközés
-Módosítsa a `docker-compose.yml` fájlban a port mappings értékeit a `ports` szekció alatt.
+1:16
