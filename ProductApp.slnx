@@ -2,5 +2,8 @@
   <Project Path="BlazorUI/BlazorUI.csproj" />
   <Project Path="Shared/Shared.csproj" />
   <Project Path="WebAPI/WebAPI.csproj" />
+  <Folder Name="/Solution Items/">
+    <File Path="TextFile1.txt" />
+  </Folder>
   <Project Path="AuthAPI/AuthAPI.csproj" />
 </Solution>
