@@ -1,6 +1,6 @@
-# ProductApp - Docker Quick Start Guide
+# ProductApp - Docker & Minikube Quick Start Guide
 
-## 🚀 Gyors Indítás (5 perc)
+## 🚀 Gyors Indítás Dockerrel (5 perc)
 
 ### 1. Előfeltételek
 - ✅ Docker Desktop telepítve és futtatva
@@ -28,10 +28,48 @@ docker-compose ps
 
 ---
 
+## ☸️ Gyors Indítás Minikube-bal (Kubernetes)
+
+### 1. Előfeltételek
+- ✅ Docker Desktop telepítve és futtatva
+- ✅ Minikube és kubectl telepítve
+- ✅ Kubernetes manifest fájlok (pl. a `k8s/` mappában)
+
+### 2. Indítás
+
+```powershell
+# Minikube indítása
+minikube start
+
+# 1. Állítsd be a környezeti változókat a minikube-hoz
+& minikube -p minikube docker-env | Invoke-Expression
+
+# 2. Buildeld le az applikációkat a Minikube Docker démonába
+docker-compose build
+
+# 3. Futtasd az alkalmazást az újonnan elkészített k8s/ mappával
+kubectl apply -f k8s/
+```
+
+### 3. Ellenőrzés
+
+```powershell
+# Podok állapotának lekérdezése
+kubectl get pods
+
+# Service-ek lekérdezése
+kubectl get svc
+
+# BlazorUI megnyitása a böngészőben Minikube segítségével
+minikube service blazorui-service
+```
+
+---
+
 ## 📋 Service-ek
 
-| Service | Port | URL |
-|---------|------|-----|
+| Service | Port | URL Dockerben |
+|---------|------|---------------|
 | **BlazorUI** (Frontend) | 8080 | http://localhost:8080 |
 | **WebAPI** (Termékek) | 7211 | http://localhost:7211 |
 | **AuthAPI** (Autentikáció) | 7297 | http://localhost:7297 |
@@ -48,26 +86,41 @@ docker-compose ps
 
 ## 📊 Logok megtekintése
 
+### Docker
 ```powershell
-# Összes service loga
+# Összes service logja
 docker-compose logs -f
 
-# Egy service loga
+# Egy service logja
 docker-compose logs -f blazorui
-docker-compose logs -f webapi
-docker-compose logs -f authapi
+```
+
+### Kubernetes (Minikube)
+```powershell
+# Egy adott pod logjainak megtekintése
+kubectl logs -f <pod-nev>
 ```
 
 ---
 
 ## 🛑 Leállítás
 
+### Docker
 ```powershell
 # Leállítás (adatok megmaradnak)
 docker-compose down
 
 # Teljes törlés (adatok is)
 docker-compose down -v
+```
+
+### Minikube
+```powershell
+# Erőforrások törlése a Kubernetes fürtből
+kubectl delete -f k8s/
+
+# Minikube leállítása
+minikube stop
 ```
 
 ---
@@ -87,6 +140,11 @@ docker-compose down -v
 mongodb://mongodb:27017
 ```
 
+**Kubernetes-ben (példa):**
+```
+mongodb://mongodb-service:27017
+```
+
 **Helyi fejlesztés:**
 ```
 mongodb://localhost:27017
@@ -96,7 +154,7 @@ mongodb://localhost:27017
 
 ## ❓ Hibaelhárítás
 
-### "Address already in use"
+### "Address already in use" (Docker)
 ```yaml
 # Változtassa meg a portot a docker-compose.yml-ben
 ports:
@@ -105,8 +163,11 @@ ports:
 
 ### "Connection refused"
 ```powershell
-# Ellenőrizze, hogy a MongoDB elindult
+# Ellenőrizze, hogy a MongoDB elindult Dockerben:
 docker-compose logs mongodb
+
+# Vagy Kubernetes esetén nézze meg a pod állapotát:
+kubectl get pods
 
 # Várjon ~10 másodpercet a MongoDB inicializálásához
 ```
@@ -123,11 +184,13 @@ docker-compose logs mongodb
 - **Részletes Docker útmutató**: Lásd `DOCKER.md`
 - **DevOps deployment**: Lásd `DEVOPS.md`
 - **.NET Docker best practices**: Lásd `DOCKER-DOTNET.md`
+- **Minikube útmutató**: Lásd `Minikube.md`
 
 ---
 
 ## 🎯 Közös parancsok
 
+### Docker
 ```powershell
 # Rebuild egy service-t
 docker-compose build webapi; docker-compose up -d
@@ -137,9 +200,15 @@ docker-compose down -v; docker-compose up -d --build
 
 # Egy container-be belépni
 docker exec -it productapp-webapi /bin/sh
+```
 
-# Container kimenete megtekintése
-docker-compose logs --tail 100 webapi
+### Kubernetes
+```powershell
+# Belépés egy pod interaktív shelljébe
+kubectl exec -it <pod-nev> -- /bin/sh
+
+# Port továbbítása helyi gépre (pl. teszteléshez)
+kubectl port-forward svc/webapi-service 7211:80
 ```
 
 ---
@@ -155,4 +224,4 @@ Az AuthAPI automatikusan létrehozza az alábbi felhasználókat:
 
 ---
 
-**Készen áll?** Nyomja meg a `docker-compose up -d --build` parancsot! 🚀
+**Készen áll?** Nyomja meg a `docker-compose up -d --build` vagy a `minikube start` parancsot! 🚀
