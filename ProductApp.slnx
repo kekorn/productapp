@@ -1,6 +1,6 @@
 <Solution>
   <Folder Name="/Solution Items/">
-    <File Path="Docker.md" />
+    <File Path="Kontenerizacio.md" />
   </Folder>
   <Project Path="AuthAPI/AuthAPI.csproj" />
   <Project Path="BlazorUI/BlazorUI.csproj" />
