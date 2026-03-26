@@ -1,0 +1,62 @@
+﻿@page "/initialization"
+@rendermode InteractiveServer
+@inject HttpClient Http
+@using Microsoft.AspNetCore.Components.Authorization
+
+<AuthorizeView>
+    <Authorized>
+        <h3>Initialization</h3>
+
+        <p>Az adatbázis alapadatainak feltöltése.</p>
+
+        <button class="btn btn-primary" @onclick="RunInitialization" disabled="@isLoading">
+            @(isLoading ? "Futtatás..." : "Initialize DB")
+        </button>
+
+        @if (!string.IsNullOrWhiteSpace(message))
+        {
+            <div class="alert @(isSuccess ? "alert-success" : "alert-danger") mt-3">@message</div>
+        }
+    </Authorized>
+    <NotAuthorized>
+        <div class="alert alert-danger">
+            Bejelentkezés szükséges az inicializáláshoz.
+        </div>
+    </NotAuthorized>
+</AuthorizeView>
+
+@code {
+    private bool isLoading;
+    private bool isSuccess;
+    private string? message;
+
+    private async Task RunInitialization()
+    {
+        isLoading = true;
+        message = null;
+
+        try
+        {
+            var response = await Http.PostAsync("dbinit/add", null);
+            if (response.IsSuccessStatusCode)
+            {
+                isSuccess = true;
+                message = "Inicializálás sikeresen lefutott.";
+            }
+            else
+            {
+                isSuccess = false;
+                message = $"Inicializálás sikertelen: {response.StatusCode}";
+            }
+        }
+        catch (Exception ex)
+        {
+            isSuccess = false;
+            message = $"Hiba: {ex.Message}";
+        }
+        finally
+        {
+            isLoading = false;
+        }
+    }
+}

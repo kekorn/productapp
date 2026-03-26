@@ -20,14 +20,16 @@
         }
         else
         {
-            <div style="max-width: 300px; margin: 0 auto;">
+            <div style="max-width: 350px; margin: 0 auto;">
                 <div class="table-responsive">
                     <QuickGrid Items="@categories.AsQueryable()" Pagination="@pagination" Class="table table-sm">
                         @* <PropertyColumn Property="@(c => c.CategoryID)" Title="ID" /> *@
                         <PropertyColumn Property="@(c => c.CName)" Title="Name" />
                         <TemplateColumn Title="Actions" Context="category" >
-                            <a href="/category/edit/@category.Id" class="btn btn-sm btn-warning float-end">Edit</a>
-                            <button class="btn btn-sm btn-danger me-1 float-end" @onclick="() => DeleteCategory(category.Id)">Delete</button>
+                            <div class="d-flex justify-content-end gap-1">
+                                <a href="/category/edit/@category.Id" class="btn btn-sm btn-warning">Edit</a>
+                                <button class="btn btn-sm btn-danger" @onclick="() => DeleteCategory(category.Id)">Delete</button>
+                            </div>
                         </TemplateColumn>
                     </QuickGrid>
                 </div>

@@ -7,6 +7,7 @@
     <File Path="Docs/Kontenerizacio.md" />
     <File Path="Docs/Minikube.md" />
     <File Path="Docs/MONGODB-MIGRATION.md" />
+    <File Path="Docs/ProductApp.md" />
     <File Path="k8s/productapp-manifest.yaml" />
   </Folder>
   <Project Path="AuthAPI/AuthAPI.csproj" />
