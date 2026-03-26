@@ -2,7 +2,7 @@ services:
   # MongoDB Database
   mongodb:
     image: mongo:latest
-    container_name: kekorn/productapp-mongodb
+    container_name: productapp-mongodb
     environment:
       MONGO_INITDB_DATABASE: ProductApp
     ports:
@@ -22,7 +22,7 @@ services:
     build:
       context: .
       dockerfile: WebAPI/Dockerfile
-    container_name: kekorn/productapp-webapi
+    container_name: productapp-webapi
     environment:
       ASPNETCORE_ENVIRONMENT: "Production"
       ConnectionStrings__MongoDB: "mongodb://mongodb:27017"
@@ -41,7 +41,7 @@ services:
     build:
       context: .
       dockerfile: AuthAPI/Dockerfile
-    container_name: kekorn/productapp-authapi
+    container_name: productapp-authapi
     environment:
       ASPNETCORE_ENVIRONMENT: "Production"
       ConnectionStrings__MongoDB: "mongodb://mongodb:27017"
@@ -59,7 +59,7 @@ services:
   blazorui:
     build:
       context: .
-      dockerfile: kekorn/BlazorUI/Dockerfile
+      dockerfile: BlazorUI/Dockerfile
     container_name: productapp-blazorui
     environment:
       ASPNETCORE_ENVIRONMENT: "Production"

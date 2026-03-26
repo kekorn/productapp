@@ -125,6 +125,62 @@ minikube stop
 
 ---
 
+## 🐳 Saját Docker Hub Repository Használata
+
+Ha a saját Docker Hub fiókodba szeretnéd feltölteni (push) az image-eket (így bárhonnan le tudod pull-olni őket), kövesd az alábbi lépéseket:
+
+### 1. Bejelentkezés a Docker Hub-ba
+```powershell
+# Bekéri a Docker Hub felhasználónevedet és jelszavadat/tokenedet
+docker login
+```
+
+### 2. Helyi build és Tag-elés (Címkézés)
+A Docker Hub megköveteli, hogy az image-ek neve a felhasználóneveddel kezdődjön. Cseréld le a `sajat_felhasznalonev` részt a tiédre:
+
+```powershell
+$DOCKER_USER="sajat_felhasznalonev"
+
+# Helyi image-ek felcímkézése a felhasználóneveddel
+docker tag productapp-webapi $DOCKER_USER/productapp-webapi:latest
+docker tag productapp-authapi $DOCKER_USER/productapp-authapi:latest
+docker tag productapp-blazorui $DOCKER_USER/productapp-blazorui:latest
+```
+
+### 3. Feltöltés (Push)
+```powershell
+docker push $DOCKER_USER/productapp-webapi:latest
+docker push $DOCKER_USER/productapp-authapi:latest
+docker push $DOCKER_USER/productapp-blazorui:latest
+```
+
+> **Fontos:** Ha utána ezeket a publikált image-eket szeretnéd használni, ne felejtsd el frissíteni a `docker-compose.yml` (`image: sajat_felhasznalonev/...`) és a `k8s/productapp-manifest.yaml` fájlokban az image referenciákat!
+
+### 4. Publikált image-ek használata Minikube-ban
+
+Miután feltöltötted az image-eket a Docker Hub-ra, már nincs szükség a Minikube belső Docker démonjának használatára, a k8s közvetlenül a Docker Hub-ról fogja letölteni azokat. 
+
+Ehhez módosítanod kell a Kubernetes manifest fájlt (`k8s/productapp-manifest.yaml`), hogy az új, Docker Hub-os image-re mutasson.
+
+**Példa a `productapp-manifest.yaml` módosítására:**
+```yaml
+      containers:
+      - name: webapi
+        # Ez volt régen:
+        # image: productapp-webapi
+        # Ez lesz az új (cseréld le a felhasználónevedre!):
+        image: sajat_felhasznalonev/productapp-webapi:latest
+        # Érdemes az imagePullPolicy-t is beállítani, hogy biztosan a legfrissebbet töltse le:
+        imagePullPolicy: Always
+```
+
+Miután frissítetted a manifest fájlt minden service-nél (webapi, authapi, blazorui), egyszerűen alkalmazd újra a konfigurációt:
+```powershell
+kubectl apply -f k8s/
+```
+
+---
+
 ## 🛠️ Fejlesztés
 
 ### Docker-ben futó alkalmazás szerkesztése
