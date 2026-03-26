@@ -1,0 +1,63 @@
+
+name: CI/CD - Docker Build & Push
+
+on:
+  push:
+    branches: ["main"]
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Docker Login
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Setup Buildx
+        uses: docker/setup-buildx-action@v3
+
+      # -------- WEBAPI --------
+      - name: Build & Push ProductApp WebAPI
+        uses: docker/build-push-action@v5
+        with:
+          context: ./ProductApp.WebApi
+          push: true
+          tags: |
+            ${{ secrets.DOCKERHUB_USERNAME }}/productapp-webapi:latest
+            ${{ secrets.DOCKERHUB_USERNAME }}/productapp-webapi:${{ github.sha }}
+
+      # -------- AUTHAPI --------
+      - name: Build & Push ProductApp AuthAPI
+        uses: docker/build-push-action@v5
+        with:
+          context: ./ProductApp.AuthApi
+          push: true
+          tags: |
+            ${{ secrets.DOCKERHUB_USERNAME }}/productapp-authapi:latest
+            ${{ secrets.DOCKERHUB_USERNAME }}/productapp-authapi:${{ github.sha }}
+
+      # -------- BLAZOR UI --------
+      - name: Build & Push ProductApp Blazor UI
+        uses: docker/build-push-action@v5
+        with:
+          context: ./ProductApp.BlazorUI
+          push: true
+          tags: |
+            ${{ secrets.DOCKERHUB_USERNAME }}/productapp-blazorui:latest
+            ${{ secrets.DOCKERHUB_USERNAME }}/productapp-blazorui:${{ github.sha }}
+
+      # -------- MONGO INIT --------
+      - name: Build & Push ProductApp Mongo
+        uses: docker/build-push-action@v5
+        with:
+          context: ./ProductApp.Mongo
+          push: true
+          tags: |
+            ${{ secrets.DOCKERHUB_USERNAME }}/productapp-mongo:latest
+            ${{ secrets.DOCKERHUB_USERNAME }}/productapp-mongo:${{ github.sha }}
