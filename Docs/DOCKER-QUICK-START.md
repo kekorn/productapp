@@ -35,7 +35,7 @@ docker-compose ps
 | **BlazorUI** (Frontend) | 8080 | http://localhost:8080 |
 | **WebAPI** (Termékek) | 7211 | http://localhost:7211 |
 | **AuthAPI** (Autentikáció) | 7297 | http://localhost:7297 |
-| **SQL Server** | 1433 | localhost:1433 |
+| **MongoDB** | 27017 | localhost:27017 |
 
 ---
 
@@ -84,15 +84,12 @@ docker-compose down -v
 
 **Docker-ben:**
 ```
-sqlserver:1433
-User: sa
-Password: ProductApp@2024
+mongodb://mongodb:27017
 ```
 
 **Helyi fejlesztés:**
 ```
-.\sqlexpress
-Trusted_Connection: True
+mongodb://localhost:27017
 ```
 
 ---
@@ -108,10 +105,10 @@ ports:
 
 ### "Connection refused"
 ```bash
-# Ellenőrizze, hogy az SQL Server elindult
-docker-compose logs sqlserver
+# Ellenőrizze, hogy a MongoDB elindult
+docker-compose logs mongodb
 
-# Várjon ~30 másodpercet az SQL Server inicializálásához
+# Várjon ~10 másodpercet a MongoDB inicializálásához
 ```
 
 ### "Permission denied"

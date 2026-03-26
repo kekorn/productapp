@@ -171,7 +171,7 @@ Kubernetes egy nyílt forráskódú konténer-orchestration rendszer, amelyet a 
 
 ### [Letöltés](https://storage.googleapis.com/minikube/releases/latest/minikube-installer.exe) vagy parancssori telepítés és inicializázió:
 
-**Telepítés**
+**Telepítés Windows alatt**
 ```
 New-Item -Path 'c:\' -Name 'minikube' -ItemType Directory -Force
 $ProgressPreference = 'SilentlyContinue'; Invoke-WebRequest -OutFile 'c:\minikube\minikube.exe' -Uri 'https://github.com/kubernetes/minikube/releases/latest/download/minikube-windows-amd64.exe' -UseBasicParsing
@@ -190,10 +190,27 @@ if ($oldPath.Split(';') -inotcontains 'C:\minikube'){
 .\minikube start
 ```
 
-
 **Hozzáférés a minikube klaszterben futó Kubernetes irányítópulthoz:**
 ```
 .\minikube.exe dashboard
+```
+
+**Telepítés Linux alatt**
+
+```
+git és egyéb szükséges eszközök telepítése:
+sudo apt intall git vim
+
+mintakörnyezet letöltése:
+git clone https://github.com/sandervanvugt/ckad
+
+cd ckad
+
+minikube telepítése:
+./minikube-docker-setup-sh
+
+indítás:
+./minikube-start --vm-driver=docker
 ```
 
 
@@ -263,6 +280,7 @@ if ($oldPath.Split(';') -inotcontains 'C:\minikube'){
 - `kubectl describe secret <secret-name>`: Secret
 - `kubectl describe node <node-name>`: Node részletes információinak megtekintése
 - `kubectl describe namespace <namespace-name>`: Namespace részletes információinak megtekintése
+- `kubectl completion`: Kubectl parancsok automatikus kiegészítése
 
 ---
 Deployment létrehozása egy adott image-ből: `kubectl create deploy <deployment-name> --image=<image-name>`
@@ -272,3 +290,34 @@ Deployment létrehozása egy adott image-ből: `kubectl create deploy <deploymen
 `kubectl api-resources`:Az összes elérhető Kubernetes erőforrás típus listázása 
 
 git clone https://github.com/sandervanvugt/ckad 
+
+**minikube parancsok:**
+- `minikube status`: aktuális állapot lekérdezése
+- `kubectl get all`: kubectl kliens műveleteket ellenőrző parancs
+- `minikube dashboard`: minikube dashboard megnyitása a böngészőben
+- `minikube ssh`: minikube virtuális géphez való SSH kapcsolódás
+- `minikube start`: minikube indítása
+- `minikube stop`: minikube leállítása
+- `minikube delete`: minikube teljes törlése
+- `minikube ip`: minikube virtuális gép IP címének lekérdezése
+- `minikube logs`: minikube virtuális gép naplóinak megtekintése
+- `minikube version`: minikube verziójának lekérdezésed
+- `docker ps`: A minikube hoston futó Docker konténerek listázása
+- `minikube alias=<alias-name>`: Egyéni alias létrehozása a minikube parancsokhoz, például `minikube alias=mk` után `mk start` a minikube indításához
+
+**Munka podokkal**
+``` 
+Pod létrehozása:
+kubectl run myginx --image=nginx
+
+Pod tulajdonságainak listázása yaml formátumban:
+kubectl get pods -o yaml
+
+Pod részletes információinak megtekintése:
+kubectl describe pods
+
+
+
+
+```
+

@@ -59,7 +59,7 @@ dotnet run --project BlazorUI/BlazorUI.csproj
 | Aspektus | Local | Docker |
 |----------|-------|--------|
 | Port | 7211, 7297, etc. | 8080 |
-| Connection String | `.\sqlexpress` | `sqlserver` |
+| Connection String | `mongodb://localhost:27017` | `mongodb://mongodb:27017` |
 | API Base URL | `https://localhost:7211` | `http://webapi:8080` |
 | Build sebesség | Gyorsabb | Lassabb (első ízben) |
 | Debugging | Visual Studio debugger | Docker logs |
@@ -217,10 +217,10 @@ lsof -i :8080
 ### Problem: "Service can't reach database"
 
 ```bash
-# Ellenőrizze az SQL Server health check-et
-docker logs productapp-sqlserver
+# Ellenőrizze a MongoDB health check-et
+docker logs productapp-mongodb
 
-# Az authapi várjon az sql server health check-re
+# Az authapi várjon a mongodb health check-re
 ```
 
 ## Database Migration Docker-ben

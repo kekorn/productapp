@@ -16,7 +16,7 @@ Az alkalmazás teljes Docker containerizációja sikeresen befejezve!
 Mindegyik multi-stage build-et használ a kisebb image-ek érdekében.
 
 ### 2. **Docker Compose Orchestration**
-- ✅ `docker-compose.yml` - Teljes stack definíció (BlazorUI, WebAPI, AuthAPI, SQL Server)
+- ✅ `docker-compose.yml` - Teljes stack definíció (BlazorUI, WebAPI, AuthAPI, MongoDB)
 - ✅ `docker-compose.override.yml` - Helyi fejlesztési felülbírálatok (szerkesztendő)
 
 ### 3. **Konfigurációs Fájlok**
@@ -25,8 +25,8 @@ Mindegyik multi-stage build-et használ a kisebb image-ek érdekében.
 
 ### 4. **Frissített Alkalmazás Konfigurációk**
 - ✅ `BlazorUI/appsettings.json` - Docker URLs-szel
-- ✅ `WebAPI/appsettings.json` - Container SQL Server connection stringgel
-- ✅ `AuthAPI/appsettings.json` - Container SQL Server connection stringgel
+- ✅ `WebAPI/appsettings.json` - Container MongoDB connection stringgel
+- ✅ `AuthAPI/appsettings.json` - Container MongoDB connection stringgel
 
 ### 5. **Dokumentáció**
 - ✅ `DOCKER.md` - Részletes Docker útmutató
@@ -57,15 +57,15 @@ Ekkor nyissa meg a böngészőt: **http://localhost:8080**
 ## 🏗️ Architektúra
 
 ```
-┌─────────────────────────────────────┐
-│     Docker Network: bridge          │
-├─────────────────────────────────────┤
-│                                     │
-│  ┌──────────────┐                   │
-│  │   BlazorUI   │                   │
-│  │ :8080/8443   │                   │
-│  └──────┬───────┘                   │
-│         │                           │
+┌────────────────────────────────────┐
+│     Docker Network: bridge         │
+├────────────────────────────────────┤
+│                                    │
+│  ┌──────────────┐                  │
+│  │   BlazorUI   │                  │
+│  │ :8080/8443   │                  │
+│  └──────┬───────┘                  │
+│         │                          │
 │  ┌──────▼───────┐   ┌───────────┐  │
 │  │   WebAPI     │   │  AuthAPI  │  │
 │  │ :8080/8443   │   │ :8080/8443│  │
@@ -73,9 +73,9 @@ Ekkor nyissa meg a böngészőt: **http://localhost:8080**
 │         │                 │        │
 │         └────────┬────────┘        │
 │                  │                 │
-│         ┌────────▼────────┐        │
-│         │  SQL Server     │        │
-│         │  :1433          │        │
+|         ┌────────▼────────┐        │
+│         │  MongoDB        │        │
+│         │  :27017         │        │
 │         └─────────────────┘        │
 │                                    │
 └────────────────────────────────────┘
@@ -85,13 +85,11 @@ Ekkor nyissa meg a böngészőt: **http://localhost:8080**
 
 ## 💾 Adatbázis
 
-- **Engine**: Microsoft SQL Server 2022
-- **Container**: `productapp-sqlserver`
-- **Port**: 1433
-- **SA Username**: `sa`
-- **SA Password**: `ProductApp@2024`
+- **Engine**: MongoDB
+- **Container**: `productapp-mongodb`
+- **Port**: 27017
 - **Adatbázis neve**: `ProductApp`
-- **Adatperzisztencia**: Docker volume (`sqlserver_data`)
+- **Adatperzisztencia**: Docker volume (`mongodb_data`)
 
 ---
 
@@ -123,7 +121,7 @@ docker-compose logs -f
 docker-compose logs -f webapi
 docker-compose logs -f authapi
 docker-compose logs -f blazorui
-docker-compose logs -f sqlserver
+docker-compose logs -f mongodb
 ```
 
 ### Container statisztikák
@@ -167,12 +165,12 @@ docker rmi productapp-webapi productapp-authapi productapp-blazorui
 
 **Docker containerek közötti kommunikáció:**
 ```
-Server=sqlserver;Database=ProductApp;User Id=sa;Password=ProductApp@2024;
+mongodb://mongodb:27017
 ```
 
-**Helyi fejlesztés (Visual Studio-ban):**
+**Helyi fejlesztés:**
 ```
-Server=.\sqlexpress;Database=ProductApp;Trusted_Connection=True;
+mongodb://localhost:27017
 ```
 
 ---
@@ -214,10 +212,10 @@ az acr build --registry myregistry --image myapp .
 ### "Address already in use"
 Módosítsa a `docker-compose.yml` port mappingeket.
 
-### "Connection refused - SQL Server"
+### "Connection refused - MongoDB"
 ```bash
-# Várjon az SQL Server inicializálásához
-docker-compose logs sqlserver
+# Várjon a MongoDB inicializálásához
+docker-compose logs mongodb
 
 # Ellenőrizze a health check-et
 docker-compose ps
@@ -259,7 +257,7 @@ Az alkalmazás teljes Docker containerizációja kész az **production és devel
 
 ---
 
-**Last Updated**: 2026-03-23
+**Last Updated**: 2026-03-24
 **Docker Version**: 24.0+
 **.NET Version**: 8.0
-**SQL Server Version**: 2022
+**MongoDB Version**: 7.0+

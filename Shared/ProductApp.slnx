@@ -1,3 +1,14 @@
 <Solution>
-  <Project Path="ProductApp.csproj" />
+  <Folder Name="/Solution Items/">
+    <File Path="../Docs/CONTAINERIZATION-SUMMARY.md" />
+    <File Path="../Docs/DEVOPS.md" />
+    <File Path="../Docs/DOCKER-DOTNET.md" />
+    <File Path="../Docs/DOCKER-QUICK-START.md" />
+    <File Path="../Docs/Kontenerizacio.md" />
+    <File Path="../Docs/MONGODB-MIGRATION.md" />
+  </Folder>
+  <Project Path="../AuthAPI/AuthAPI.csproj" />
+  <Project Path="../BlazorUI/BlazorUI.csproj" />
+  <Project Path="../WebAPI/WebAPI.csproj" />
+  <Project Path="Shared.csproj" />
 </Solution>

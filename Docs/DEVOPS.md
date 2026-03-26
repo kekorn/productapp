@@ -77,7 +77,7 @@ az container create \
   --registry-password <password> \
   --environment-variables \
     ASPNETCORE_ENVIRONMENT=Production \
-    ConnectionStrings__dbConnect="Server=<db-server>;Database=ProductApp;User Id=<user>;Password=<pwd>;" \
+    ConnectionStrings__dbConnect="mongodb://<db-server>:27017" \
   --ports 8080
 
 # Hasonlóan az AuthAPI és BlazorUI számára
@@ -126,7 +126,7 @@ spec:
         - containerPort: 8080
         env:
         - name: ConnectionStrings__dbConnect
-          value: "Server=sqlserver;..."
+          value: "mongodb://mongodb:27017"
 ---
 apiVersion: v1
 kind: Service
