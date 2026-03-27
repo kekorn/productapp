@@ -20,11 +20,11 @@ jobs:
       matrix:
         service:
           - name: webapi
-            path: ProductApp.WebApi
+            path: WebApi
           - name: authapi
-            path: ProductApp.AuthApi
+            path: AuthApi
           - name: blazorui
-            path: ProductApp.BlazorUI
+            path: BlazorUI
 
     steps:
       - name: Checkout code
