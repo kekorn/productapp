@@ -9,7 +9,7 @@
 
 ### 2. Alkalmazás indítása
 
-```bash 
+```bash
 cd C:\Users\kekor\source\repos\Kekorn\ProductApp
 docker-compose up -d --build
 ```
