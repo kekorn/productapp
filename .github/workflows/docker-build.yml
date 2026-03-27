@@ -20,7 +20,7 @@ jobs:
       matrix:
         service:
           - name: webapi
-            path: WebApi
+            path: WebAPI
           - name: authapi
             path: AuthApi
           - name: blazorui
