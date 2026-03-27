@@ -22,7 +22,7 @@ jobs:
           - name: webapi
             path: WebAPI
           - name: authapi
-            path: AuthApi
+            path: AuthAPI
           - name: blazorui
             path: BlazorUI
 
