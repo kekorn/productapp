@@ -8,7 +8,7 @@
 
 ### 2. Indítás
 
-```powershell
+```
 # Nyissa meg a PowerShell-t és navigáljon a project könyvtárba
 cd C:\Users\kekor\source\repos\Kekorn\ProductApp
 
@@ -18,7 +18,7 @@ docker-compose up -d --build
 
 ### 3. Ellenőrzés
 
-```powershell
+```
 # Ellenőrizze a container állapotát
 docker-compose ps
 
@@ -26,6 +26,14 @@ docker-compose ps
 # BlazorUI: http://localhost:8080
 ```
 
+### 4. Leállítás
+```
+# Leállítás (adatok megmaradnak)
+docker-compose down
+
+# Teljes törlés (adatok is)
+docker-compose down -v
+```
 ---
 
 ## ☸️ Gyors Indítás Minikube-bal (Kubernetes)
@@ -37,7 +45,7 @@ docker-compose ps
 
 ### 2. Indítás
 
-```powershell
+```
 # Minikube indítása
 minikube start
 
@@ -53,7 +61,7 @@ kubectl apply -f k8s/
 
 ### 3. Ellenőrzés
 
-```powershell
+```
 # Podok állapotának lekérdezése
 kubectl get pods
 
@@ -64,6 +72,14 @@ kubectl get svc
 minikube service blazorui-service
 ```
 
+### Leállítás
+```
+# Erőforrások törlése a Kubernetes fürtből
+kubectl delete -f k8s/
+
+# Minikube leállítása
+minikube stop
+```
 ---
 
 ## 📋 Service-ek
@@ -103,25 +119,7 @@ kubectl logs -f <pod-nev>
 
 ---
 
-## 🛑 Leállítás
 
-### Docker
-```powershell
-# Leállítás (adatok megmaradnak)
-docker-compose down
-
-# Teljes törlés (adatok is)
-docker-compose down -v
-```
-
-### Minikube
-```powershell
-# Erőforrások törlése a Kubernetes fürtből
-kubectl delete -f k8s/
-
-# Minikube leállítása
-minikube stop
-```
 
 ---
 

@@ -5,6 +5,8 @@
     <File Path="Docs/DEVOPS.md" />
     <File Path="Docs/DOCKER-DOTNET.md" />
     <File Path="Docs/DOCKER-QUICK-START.md" />
+    <File Path="Docs/DOCKER-QUICK-STARTV2 másolata.md" />
+    <File Path="Docs/DOCKER-QUICK-STARTV2.md" />
     <File Path="Docs/Kontenerizacio.md" />
     <File Path="Docs/Minikube.md" />
     <File Path="Docs/MONGODB-MIGRATION.md" />

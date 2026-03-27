@@ -4,20 +4,31 @@
 
 <h1>ProductApp Docker</h1>
 <div class="m-4">
-<p>
-    Egyszerű termék nyílvántartási alkalmazás. A Categories menüpontban lehet kategóriákat felvenni,
-    a Products menüpontban pedig termékeket, amik egy kategóriához tartoznak. A termékek és kategóriák
-    szerkesztése és törlése csak bejelentkezett felhasználók számára elérhető. Az Initialzation menüpont
-    segít az alapadatok visszaállításában.
-</p>
-<p>
-    Az alkalmazást tanulási céllal készítettem az alapok elsajátításához, ezért a funkcionalitás egyszerű,
-    és a design minimális. Pont annyi, ami elég.
-</p>
-<p>
-    A backend mikroszervízként működik, egy autentikációs szolgáltatással és egy terméknyílvántartási szolgáltatással. 
-    A frontend Blazor Server alkalmazásként fut és a backend szolgáltatásokkal HTTP API-kon keresztül kommunikál. 
-    Az adatbázist MS SQL Server alkalmazásával kezeltem, de MongoDB- re alakítottam át. 
-    Érezhetően fürgébb lett az adatok elérése már ilyen kevés adattal is.
-</p>
+    <p>
+        Egyszerű termék nyílvántartási alkalmazás. A Categories menüpontban lehet kategóriákat felvenni,
+        a Products menüpontban pedig termékeket, amik egy kategóriához tartoznak. A termékek és kategóriák
+        szerkesztése és törlése csak bejelentkezett felhasználók számára elérhető. Az Initialzation menüpont
+        segít az alapadatok visszaállításában.
+    </p>
+    <p>
+        Az alkalmazást tanulási céllal készítettem az alapok elsajátításához, ezért a funkcionalitás egyszerű,
+        és a design minimális. Pont annyi, ami elég. Felhasználóként egy <i>>admin</i> és egy <i>user</i> nevű felhasználó 
+        lett létrehozva. A jelszó megegyezik a felhasználónevekkel az egyszerűség kedvéért.
+    </p>
+    <p>
+        A backend mikroszervízként működik, egy autentikációs szolgáltatással és egy terméknyílvántartási szolgáltatással.
+        A frontend Blazor Server alkalmazásként fut és a backend szolgáltatásokkal HTTP API-kon keresztül kommunikál.
+        Az adatbázist MS SQL Server alkalmazásával kezeltem, de MongoDB- re alakítottam át.
+        Érezhetően fürgébb lett az adatok elérése már ilyen kevés adattal is.
+    </p>
+    <p>
+        A guthub action CI/CD pipeline-ot is beállítottam, ami a main branch-re történő push után automatikusan
+        feltölti a docker hubomba a legfrissebb képeket. A camelCase könyvtárnevek és a nagybetűs github felhasználónév
+        miatt nagyon megszenvedtem, mert a Linux alapú fájlrendszer miatt docker hubba történő feltöltés hibára futott,
+        de végül megoldottam.
+    </p>
+    <p>
+        A productapp-manifest.yaml fájlban a docker hubban tárolt képet használom, így a deployment mindig a 
+        legfrissebb verziót fogja használni, nem kell letölteni a képeket, időtakarékosabb.
+    </p>
 </div>
