@@ -6,7 +6,7 @@
 - Kubernetes manifest fájl(ok) (pl. a `k8s/` mappában)
 
 ### 2. Indítás
-A mellékelt Kubernetes manifest fájlnak létre kell hozni egy mappát, bemásolni és a mappából indítani 
+A mellékelt Kubernetes manifest fájlnak létre kell hozni egy mappát, bemásolni és
 futtatni a következő parancsokat.
 ```
 # Minikube indítása
@@ -51,4 +51,14 @@ minikube stop
 - **Username**: `admin` / **Password**: `admin` (Admin)
 - **Username**: `user` / **Password**: `user` (User)
 
+### Felhasználói útmutató: 
+Login mellett, a képernyő jobb felső sarkában található Manual nevű linkkel érhető el. 
+
+### Github Repository:
+https://github.com/kekorn/productapp.git
+
+### Github Container Registry: 
+- ghcr.io/kekorn/productapp/webapi
+- ghcr.io/kekorn/productapp/authapi
+- ghcr.io/kekorn/productapp/blazorui
 ---
