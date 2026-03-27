@@ -25,7 +25,7 @@ spec:
     spec:
       containers:
       - name: mongodb
-        image: kekorn/productapp-mongo:latest
+        image: ghcr.io/kekorn/productapp-mongo:latest
         imagePullPolicy: Always
         env:
         - name: MONGO_INITDB_DATABASE
@@ -60,7 +60,7 @@ spec:
     spec:
       containers:
       - name: webapi
-        image: kekorn/productapp-webapi
+        image: ghcr.io/kekorn/productapp-webapi
         imagePullPolicy: Always
         env:
         - name: ASPNETCORE_ENVIRONMENT
@@ -99,7 +99,7 @@ spec:
     spec:
       containers:
       - name: authapi
-        image: kekorn/productapp-authapi
+        image: ghcr.io/kekorn/productapp-authapi
         imagePullPolicy: Always
         env:
         - name: ASPNETCORE_ENVIRONMENT
@@ -139,7 +139,7 @@ spec:
     spec:
       containers:
       - name: blazorui
-        image: kekorn/productapp-blazorui
+        image: ghcr.io/kekorn/productapp-blazorui
         imagePullPolicy: Always
         env:
         - name: ASPNETCORE_ENVIRONMENT
