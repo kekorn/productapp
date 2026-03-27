@@ -60,7 +60,7 @@ spec:
     spec:
       containers:
       - name: webapi
-        image: ghcr.io/kekorn/webapi
+        image: ghcr.io/kekorn/productapp/webapi
         imagePullPolicy: Always
         env:
         - name: ASPNETCORE_ENVIRONMENT
@@ -99,7 +99,7 @@ spec:
     spec:
       containers:
       - name: authapi
-        image: ghcr.io/kekorn/authapi
+        image: ghcr.io/kekorn/productapp/authapi
         imagePullPolicy: Always
         env:
         - name: ASPNETCORE_ENVIRONMENT
@@ -139,7 +139,7 @@ spec:
     spec:
       containers:
       - name: blazorui
-        image: ghcr.io/kekorn/productapp-blazorui
+        image: ghcr.io/kekorn/productapp/blazorui
         imagePullPolicy: Always
         env:
         - name: ASPNETCORE_ENVIRONMENT

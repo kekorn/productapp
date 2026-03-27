@@ -18,14 +18,15 @@
     <p>
         A backend mikroszervízként működik, egy autentikációs szolgáltatással és egy terméknyílvántartási szolgáltatással.
         A frontend Blazor Server alkalmazásként fut és a backend szolgáltatásokkal HTTP API-kon keresztül kommunikál.
-        Az adatbázist MS SQL Server alkalmazásával kezeltem, de MongoDB- re alakítottam át.
-        Érezhetően fürgébb lett az adatok elérése már ilyen kevés adattal is.
+        Az adatbázist MS SQL Server alkalmazásával kezeltem, de MongoDB- re alakítottam át. Érezhetően fürgébb lett az 
+        adatok elérése már ilyen kevés adattal is.
     </p>
     <p>
         A guthub action CI/CD pipeline-ot is beállítottam, ami a main branch-re történő push után automatikusan
-        feltölti a docker hubomba a legfrissebb képeket. A camelCase könyvtárnevek és a nagybetűs github felhasználónév
-        miatt nagyon megszenvedtem, mert a Linux alapú fájlrendszer miatt docker hubba történő feltöltés hibára futott,
-        de végül megoldottam.
+        feltölti a GHCR (GitHub Container Registry) -be a legfrissebb képeket. A camelCase könyvtárnevek és a 
+        nagybetűs github felhasználónév miatt nagyon megszenvedtem, mert a Linux alapú fájlrendszer miatt a 
+        feltöltés hibára futott, de végül megoldottam. Egy kicsit megizzasztott az is, hogy a manifest fájlba
+        hibás repo hívatkozás került, de megtaláltam a hibát.
     </p>
     <p>
         A productapp-manifest.yaml fájlban a docker hubban tárolt képet használom, így a deployment mindig a 
