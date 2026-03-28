@@ -3,7 +3,8 @@
 <PageTitle>Home</PageTitle>
 
 <h1>ProductApp</h1>
-<div class="m-4">
+
+<div class="m-4 w-75" style="max-width: 1000px;">
     <p>
         Egyszerű termék nyílvántartási alkalmazás. A Categories menüpontban lehet kategóriákat felvenni,
         a Products menüpontban pedig termékeket, amik egy kategóriához tartoznak. A termékek és kategóriák
@@ -12,24 +13,24 @@
     </p>
     <p>
         Az alkalmazást tanulási céllal készítettem az alapok elsajátításához, ezért a funkcionalitás egyszerű,
-        és a design minimális. Pont annyi, ami elég. Felhasználóként egy <b>admin</b> és egy <b>user</b> nevű felhasználó 
+        és a design minimális. Pont annyi, ami elég. Felhasználóként egy <b>admin</b> és egy <b>user</b> nevű felhasználó
         lett létrehozva. A jelszó megegyezik a felhasználónevekkel az egyszerűség kedvéért.
     </p>
     <p>
         A backend mikroszervízként működik, egy autentikációs szolgáltatással és egy terméknyílvántartási szolgáltatással.
         A frontend Blazor Server alkalmazásként fut és a backend szolgáltatásokkal HTTP API-kon keresztül kommunikál.
-        Az adatbázist MS SQL Server alkalmazásával kezeltem, de MongoDB- re alakítottam át. Érezhetően fürgébb lett az 
+        Az adatbázist MS SQL Server alkalmazásával kezeltem, de MongoDB- re alakítottam át. Érezhetően fürgébb lett az
         adatok elérése már ilyen kevés adattal is.
     </p>
     <p>
         A guthub action CI/CD pipeline-ot is beállítottam, ami a main branch-re történő push után automatikusan
-        feltölti a GHCR (GitHub Container Registry) -be a legfrissebb képeket. A camelCase könyvtárnevek és a 
-        nagybetűs github felhasználónév miatt nagyon megszenvedtem, mert a Linux alapú fájlrendszer miatt a 
+        feltölti a GHCR (GitHub Container Registry) -be a legfrissebb képeket. A camelCase könyvtárnevek és a
+        nagybetűs github felhasználónév miatt nagyon megszenvedtem, mert a Linux alapú fájlrendszer miatt a
         feltöltés hibára futott, de végül megoldottam. Egy kicsit megizzasztott az is, hogy a manifest fájlba
         hibás repo hívatkozás került, de megtaláltam a hibát.
     </p>
     <p>
-        A productapp-manifest.yaml fájlban a docker hubban tárolt képet használom, így a deployment mindig a 
+        A productapp-manifest.yaml fájlban a docker hubban tárolt képet használom, így a deployment mindig a
         legfrissebb verziót fogja használni, nem kell letölteni a képeket, időtakarékosabb.
     </p>
 </div>

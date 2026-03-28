@@ -1,16 +1,7 @@
 <Solution>
   <Folder Name="/Solution Items/">
     <File Path=".github/workflows/docker-build.yml" />
-    <File Path="Docs/CONTAINERIZATION-SUMMARY.md" />
-    <File Path="Docs/DEVOPS.md" />
-    <File Path="Docs/DOCKER-DOTNET.md" />
-    <File Path="Docs/DOCKER-QUICK-START.md" />
-    <File Path="Docs/DOCKER-QUICK-STARTV2 másolata.md" />
-    <File Path="Docs/DOCKER-QUICK-STARTV2.md" />
-    <File Path="Docs/Kontenerizacio.md" />
-    <File Path="Docs/Minikube.md" />
-    <File Path="Docs/MONGODB-MIGRATION.md" />
-    <File Path="Docs/ProductApp.md" />
+    <File Path="Docs/ReadMe.md" />
     <File Path="k8s/productapp-manifest.yaml" />
   </Folder>
   <Project Path="AuthAPI/AuthAPI.csproj" />
