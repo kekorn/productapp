@@ -12,15 +12,22 @@
         segít az alapadatok visszaállításában.
     </p>
     <p>
+        <img src="./pics/usecase.png" class="img-fluid" />
+    </p>
+    <p>
         Az alkalmazást tanulási céllal készítettem az alapok elsajátításához, ezért a funkcionalitás egyszerű,
         és a design minimális. Pont annyi, ami elég. Felhasználóként egy <b>admin</b> és egy <b>user</b> nevű felhasználó
         lett létrehozva. A jelszó megegyezik a felhasználónevekkel az egyszerűség kedvéért.
     </p>
+    <img src="./pics/uml.png" class="img-fluid" />
     <p>
         A backend mikroszervízként működik, egy autentikációs szolgáltatással és egy terméknyílvántartási szolgáltatással.
         A frontend Blazor Server alkalmazásként fut és a backend szolgáltatásokkal HTTP API-kon keresztül kommunikál.
         Az adatbázist MS SQL Server alkalmazásával kezeltem, de MongoDB- re alakítottam át. Érezhetően fürgébb lett az
         adatok elérése már ilyen kevés adattal is.
+    </p>
+    <p>
+    <img src="./pics/umlclass.png" class="img-fluid" />
     </p>
     <p>
         A guthub action CI/CD pipeline-ot is beállítottam, ami a main branch-re történő push után automatikusan
