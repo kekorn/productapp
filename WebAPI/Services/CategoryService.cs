@@ -6,6 +6,7 @@ using MongoDB.Driver;
 
 namespace WebAPI.Services
 {
+    // CategoryController által fogadott CRUD műveletek megvalósítása a MongoDB adatbázisban.
     public class CategoryService : ICategoryService
     {
         private readonly AppDbContext context;

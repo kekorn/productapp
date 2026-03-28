@@ -5,14 +5,16 @@ using WebAPI.Data;
 using WebAPI.Services;
 using WebAPI.Services.IServices;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace WebAPI.Controllers
 {
+    // A Http hívásokhoz kötött útvonalakat definiálja és a CategoryService
+    // szolgáltatást használja a mûveletek végrehajtásához.
+
     [Route("api/[controller]")]
     [ApiController]
     public class CategoryController : ControllerBase
-    {
+    {        
         private readonly AppDbContext context;
         private readonly CategoryService categoryService;
         

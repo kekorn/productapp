@@ -5,6 +5,8 @@ using MongoDB.Driver;  // Add this line
 
 namespace WebAPI.Services
 {
+    // DbInitController által fogadott Get művelethez kötött adatbázis
+    // inicializálási műveletek megvalósítása a MongoDB adatbázisban.
     public class DbInit
     {
         private readonly AppDbContext context;

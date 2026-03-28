@@ -1,0 +1,40 @@
+<mxfile host="app.diagrams.net" modified="2026-03-28T13:10:00.000Z" agent="GitHub Copilot" version="24.7.17" type="device">
+  <diagram id="uml-class-productapp" name="Page-1">
+    <mxGraphModel dx="1700" dy="950" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1920" pageHeight="1080" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="pkg-webapi" value="WebAPI" style="swimlane;startSize=28;rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="40" width="1500" height="740" as="geometry"/>
+        </mxCell>
+        <mxCell id="iface-category" value="&lt;&lt;interface&gt;&gt;&#xa;ICategoryService&#xa;----------------&#xa;+ GetAll(): IEnumerable&lt;CategoryDto&gt;&#xa;+ GetById(id: string): CategoryDto&#xa;+ Create(dto: CategoryDto): void&#xa;+ Update(id: string, dto: CategoryDto): void&#xa;+ Delete(id: string): void" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#82b366;dashed=1;fontStyle=2;" vertex="1" parent="pkg-webapi">
+          <mxGeometry x="20" y="50" width="360" height="190" as="geometry"/>
+        </mxCell>
+        <mxCell id="iface-product" value="&lt;&lt;interface&gt;&gt;&#xa;IProductService&#xa;----------------&#xa;+ GetAll(): IEnumerable&lt;ProductDto&gt;&#xa;+ GetById(id: string): ProductDto&#xa;+ Create(dto: ProductDto): void&#xa;+ Update(id: string, dto: ProductDto): void&#xa;+ Delete(id: string): void" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#82b366;dashed=1;fontStyle=2;" vertex="1" parent="pkg-webapi">
+          <mxGeometry x="20" y="270" width="360" height="190" as="geometry"/>
+        </mxCell>
+        <mxCell id="svc-category" value="CategoryService&#xa;----------------&#xa;- context: AppDbContext&#xa;----------------&#xa;+ GetAll(): IEnumerable&lt;CategoryDto&gt;&#xa;+ GetById(id: string): CategoryDto&#xa;+ Create(dto: CategoryDto): void&#xa;+ Update(id: string, dto: CategoryDto): void&#xa;+ Delete(id: string): void" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#82b366;" vertex="1" parent="pkg-webapi">
+          <mxGeometry x="430" y="50" width="380" height="220" as="geometry"/>
+        </mxCell>
+        <mxCell id="svc-product" value="ProductService&#xa;----------------&#xa;- context: AppDbContext&#xa;----------------&#xa;+ GetAll(): IEnumerable&lt;ProductDto&gt;&#xa;+ GetById(id: string): ProductDto&#xa;+ Create(dto: ProductDto): void&#xa;+ Update(id: string, dto: ProductDto): void&#xa;+ Delete(id: string): void" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#82b366;" vertex="1" parent="pkg-webapi">
+          <mxGeometry x="430" y="300" width="380" height="220" as="geometry"/>
+        </mxCell>
+        <mxCell id="ctl-category" value="CategoryController&#xa;----------------&#xa;- _categoryService: ICategoryService&#xa;----------------&#xa;+ Get(): IActionResult&#xa;+ Get(id: string): IActionResult&#xa;+ Create(dto: CategoryDto): IActionResult&#xa;+ Update(id: string, dto: CategoryDto): IActionResult&#xa;+ Delete(id: string): void" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#82b366;" vertex="1" parent="pkg-webapi">
+          <mxGeometry x="860" y="50" width="360" height="220" as="geometry"/>
+        </mxCell>
+        <mxCell id="ctl-product" value="ProductController&#xa;----------------&#xa;- _productService: IProductService&#xa;----------------&#xa;+ Get(): IActionResult&#xa;+ Get(id: string): IActionResult&#xa;+ Create(dto: ProductDto): IActionResult&#xa;+ Update(id: string, dto: ProductDto): IActionResult&#xa;+ Delete(id: string): void" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#82b366;" vertex="1" parent="pkg-webapi">
+          <mxGeometry x="860" y="300" width="360" height="220" as="geometry"/>
+        </mxCell>
+        <mxCell id="dbctx" value="AppDbContext&#xa;----------------&#xa;- _database: IMongoDatabase&#xa;----------------&#xa;+ Categories: IMongoCollection&lt;Category&gt;&#xa;+ Products: IMongoCollection&lt;Product&gt;&#xa;+ InitializeAsync(): Task" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#82b366;" vertex="1" parent="pkg-webapi">
+          <mxGeometry x="1260" y="160" width="220" height="180" as="geometry"/>
+        </mxCell>
+        <mxCell id="r1" style="endArrow=block;html=1;dashed=1;strokeColor=#82b366;" edge="1" parent="1" source="svc-category" target="iface-category"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="r2" style="endArrow=block;html=1;dashed=1;strokeColor=#82b366;" edge="1" parent="1" source="svc-product" target="iface-product"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="r3" style="endArrow=block;html=1;strokeColor=#82b366;" edge="1" parent="1" source="ctl-category" target="iface-category"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="r4" style="endArrow=block;html=1;strokeColor=#82b366;" edge="1" parent="1" source="ctl-product" target="iface-product"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="r5" style="endArrow=block;html=1;strokeColor=#82b366;" edge="1" parent="1" source="svc-category" target="dbctx"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="r6" style="endArrow=block;html=1;strokeColor=#82b366;" edge="1" parent="1" source="svc-product" target="dbctx"><mxGeometry relative="1" as="geometry"/></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

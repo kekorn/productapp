@@ -10,6 +10,9 @@ namespace WebAPI.Controllers
     [ApiController]
     public class ProductController : ControllerBase
     {
+        // A Http hívásokhoz kötött útvonalakat definiálja és a ProductService
+        // szolgáltatást használja a műveletek végrehajtásához.
+
         private readonly AppDbContext context;
         private readonly ProductService productservice;
 

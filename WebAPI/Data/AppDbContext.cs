@@ -17,7 +17,7 @@ namespace WebAPI.Data
 
         public async Task InitializeAsync()
         {
-            // Create collections if they don't exist
+            // Táblák létrehozása, ha még nem léteznek
             try
             {
                 var collections = await _database.ListCollectionNamesAsync();
@@ -34,13 +34,13 @@ namespace WebAPI.Data
             }
             catch
             {
-                // Collections might already exist
+                // Táblák létrehozása nem szükséges, ha már léteznek, így a kivétel elhanyagolható
             }
         }
 
         public void SaveChanges()
         {
-            // MongoDB automatically saves changes
+            // MongoDB mentése automatikusan történik, így ez a metódus üres maradhat
         }
     }
 }

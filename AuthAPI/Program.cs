@@ -17,7 +17,7 @@ var mongoConnectionString = builder.Configuration.GetConnectionString("MongoDB")
     ?? "mongodb://mongodb:27017";
 var mongoDatabaseName = builder.Configuration["MongoDB:DatabaseName"] ?? "ProductApp";
 
-// Configure MongoDB
+// MongoDB Beállítása és AppDbContext regisztrálása
 var mongoClient = new MongoClient(mongoConnectionString);
 builder.Services.AddSingleton<IMongoClient>(mongoClient);
 builder.Services.AddScoped(sp => new AppDbContext(
@@ -25,6 +25,7 @@ builder.Services.AddScoped(sp => new AppDbContext(
     mongoDatabaseName
 ));
 
+// JWT Authentication beállítása és kulcs definiálása a token generáláshoz 
 var key = Encoding.ASCII.GetBytes("ThisIsAMySuperSecretKeyForJWTTokenGenerationsInDotNet8");
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
@@ -44,7 +45,7 @@ builder.Services.AddAuthorization();
 
 var app = builder.Build();
 
-// Initialize MongoDB collections and seed data
+// MongoDB inicializálása és alapértelmezett felhasználók létrehozása, ha még nem léteznek
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
@@ -64,6 +65,7 @@ using (var scope = app.Services.CreateScope())
     }
 }
 
+// CORS beállítása, hogy minden origin engedélyezve legyen a fejlesztés során 
 app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().SetIsOriginAllowed(origin => true).AllowCredentials());
 
 app.UseAuthentication();
@@ -75,6 +77,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+// Bejelentkezési endpoint, amely ellenőrzi a felhasználó hitelesítő adatait és
+// JWT tokent generál, ha helyesek a hitelesítő adatok 
 app.MapPost("/login", async (LoginRequest request, AppDbContext db) =>
 {
     var user = await db.Users.Find(x => x.Username == request.Username && x.Password == request.Password).FirstOrDefaultAsync();

@@ -4,21 +4,24 @@ using WebAPI.Services;
 
 namespace WebAPI.Controllers
 {
+    // A Http híváshoz kötött útvonalat definiálja és a DbInit
+    // szolgáltatást használja a műveletek végrehajtásához.
+
     [Route("api/[controller]")]
     [ApiController]
     public class DbInitController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly AppDbContext context;
 
-        public DbInitController(AppDbContext context)
+        public DbInitController(AppDbContext _context)
         {
-            _context = context;
+            context = _context;
         }
         
         [HttpPost("add")]
         public async Task Add()
         {
-            var dbInit = new DbInit(_context);
+            var dbInit = new DbInit(context);
             await dbInit.InitialAsync();
         }
     }

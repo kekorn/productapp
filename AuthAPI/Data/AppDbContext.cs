@@ -2,6 +2,7 @@ using MongoDB.Driver;
 using Shared.Models;
 
 namespace AuthAPI.Data
+
 {
     public class AppDbContext
     {
@@ -16,26 +17,30 @@ namespace AuthAPI.Data
 
         public async Task InitializeAsync()
         {
-            // Create collections if they don't exist
+            // Táblák létrehozása, ha még nem léteznek
             try
             {
                 var collections = await _database.ListCollectionNamesAsync();
                 var collectionNames = await collections.ToListAsync();
 
-                if (!collectionNames.Contains("Users"))
+                if (!collectionNames.Contains("Categories"))
                 {
-                    await _database.CreateCollectionAsync("Users");
+                    await _database.CreateCollectionAsync("Categories");
+                }
+                if (!collectionNames.Contains("Products"))
+                {
+                    await _database.CreateCollectionAsync("Products");
                 }
             }
             catch
             {
-                // Collection might already exist
+                // Táblák létrehozása nem szükséges, ha már léteznek, így a kivétel elhanyagolható
             }
         }
 
         public void SaveChanges()
         {
-            // MongoDB automatically saves changes
+            // MongoDB mentése automatikusan történik, így ez a metódus üres maradhat
         }
     }
 }

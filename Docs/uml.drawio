@@ -1,0 +1,105 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/29.6.6 Chrome/144.0.7559.236 Electron/40.8.4 Safari/537.36" version="29.6.6" pages="2">
+  <diagram id="proj-overview" name="Project Overview">
+    <mxGraphModel dx="1147" dy="784" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1000" pageHeight="600" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="blazor" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1;" value="BlazorUI&#xa;(Frontend)" vertex="1">
+          <mxGeometry height="90" width="220" x="50" y="297" as="geometry" />
+        </mxCell>
+        <mxCell id="webapi" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=1;" value="WebAPI&#xa;(REST API)" vertex="1">
+          <mxGeometry height="90" width="220" x="390" y="139" as="geometry" />
+        </mxCell>
+        <mxCell id="authapi" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontStyle=1;" value="AuthAPI&#xa;(JWT / Login)" vertex="1">
+          <mxGeometry height="90" width="220" x="393" y="455" as="geometry" />
+        </mxCell>
+        <mxCell id="shared" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontStyle=1;" value="Shared&#xa;(DTO + Model)" vertex="1">
+          <mxGeometry height="90" width="220" x="393" y="297" as="geometry" />
+        </mxCell>
+        <mxCell id="mongo" parent="1" style="shape=cylinder;whiteSpace=wrap;html=1;boundedLbl=1;fillColor=#fff2cc;strokeColor=#d6b656;fontStyle=1;" value="MongoDB" vertex="1">
+          <mxGeometry height="110" width="180" x="745" y="287" as="geometry" />
+        </mxCell>
+        <mxCell id="e1" edge="1" parent="1" source="blazor" style="endArrow=block;html=1;strokeColor=#6c8ebf;" target="webapi" value="HTTP /api">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e2" edge="1" parent="1" source="blazor" style="endArrow=block;html=1;strokeColor=#d79b00;" target="authapi" value="HTTP /login">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e3" edge="1" parent="1" source="blazor" style="endArrow=block;html=1;dashed=1;strokeColor=#b85450;" target="shared" value="Project reference">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e4" edge="1" parent="1" source="webapi" style="endArrow=block;html=1;dashed=1;strokeColor=#b85450;" target="shared" value="Project reference">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e5" edge="1" parent="1" source="authapi" style="endArrow=block;html=1;dashed=1;strokeColor=#b85450;" target="shared" value="Project reference">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e6" edge="1" parent="1" source="webapi" style="endArrow=block;html=1;strokeColor=#82b366;" target="mongo" value="MongoDB Driver">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e7" edge="1" parent="1" source="authapi" style="endArrow=block;html=1;strokeColor=#d79b00;" target="mongo" value="MongoDB Driver">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="EfpfyDi1X_WSOHdWNUPM-1" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;fontSize=16;fontStyle=1" value="Alkalmazás modellje" vertex="1">
+          <mxGeometry height="30" width="190" x="405" y="70" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="layer-detail" name="Layer Detail">
+    <mxGraphModel dx="1400" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1920" pageHeight="1080" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="ui" value="BlazorUI Pages&#xa;(Category/Product/Login)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="70" y="90" width="260" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="ctrl" value="WebAPI Controllers&#xa;(Category, Product, DbInit)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="390" y="90" width="270" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="svc" value="WebAPI Services&#xa;(ICategoryService/IProductService + impl.)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="730" y="90" width="300" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="db" value="AppDbContext + Mongo Collections" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="1110" y="90" width="280" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="dto" value="Shared DTO/Model&#xa;(Category, Product, User, *Dto)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="730" y="280" width="300" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="auth" value="AuthAPI&#xa;(Login endpoint + JWT)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="390" y="280" width="270" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="mongo2" value="MongoDB" style="shape=cylinder;whiteSpace=wrap;html=1;boundedLbl=1;fillColor=#fff2cc;strokeColor=#d6b656;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1110" y="270" width="200" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="l1" style="endArrow=block;html=1;strokeColor=#6c8ebf;" edge="1" parent="1" source="ui" target="ctrl">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="l2" style="endArrow=block;html=1;strokeColor=#82b366;" edge="1" parent="1" source="ctrl" target="svc">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="l3" style="endArrow=block;html=1;strokeColor=#82b366;" edge="1" parent="1" source="svc" target="db">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="l4" style="endArrow=block;html=1;dashed=1;strokeColor=#b85450;" edge="1" parent="1" source="ctrl" target="dto">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="l5" style="endArrow=block;html=1;dashed=1;strokeColor=#b85450;" edge="1" parent="1" source="svc" target="dto">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="l6" style="endArrow=block;html=1;strokeColor=#82b366;" edge="1" parent="1" source="db" target="mongo2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="l7" value="/login" style="endArrow=block;html=1;strokeColor=#d79b00;" edge="1" parent="1" source="ui" target="auth">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="l8" style="endArrow=block;html=1;dashed=1;strokeColor=#b85450;" edge="1" parent="1" source="auth" target="dto">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="l9" style="endArrow=block;html=1;strokeColor=#d79b00;" edge="1" parent="1" source="auth" target="mongo2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
